@@ -18,11 +18,11 @@ export const profile = {
   },
   skills: {
     languages: ['Python', 'TypeScript'],
-    frameworks: ['Django', 'Odoo 17 Enterprise'],
+    frameworks: ['Django', 'Odoo 17 Enterprise', 'Angular'],
     databases: ['PostgreSQL'],
     cloud: ['Google Cloud Platform', 'Docker'],
     integration: ['REST APIs'],
-    tools: ['Git', 'Obsidian', 'Model Context Protocol'],
+    tools: ['Git', 'Obsidian', 'Model Context Protocol', 'Cordova'],
   },
   experience: [
     {
@@ -55,11 +55,13 @@ export const profile = {
       bullets: {
         pt: [
           'Desenvolvimento e manutenção de sistemas em Python, Django e Odoo.',
+          'Desenvolvimento web e mobile em Angular para aplicativo de delivery nacional, com empacotamento mobile via Cordova (gerando o APK).',
           'Implementação de melhorias em processos internos para otimização operacional.',
           'Colaboração com equipes para integrar novas funcionalidades.',
         ],
         en: [
           'Development and maintenance of systems in Python, Django, and Odoo.',
+          'Web and mobile development in Angular for a national delivery app, with mobile packaging via Cordova (building the APK).',
           'Implementation of improvements to internal processes for operational optimization.',
           'Collaboration with teams to integrate new features.',
         ],
