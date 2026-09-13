@@ -15,7 +15,7 @@ A Anthropic afirma que o Claude pegou uma prova já existente do teorema e reesc
 
 No meu trabalho, uma das coisas que mais repito é que fluxo bom é fluxo configurável, documentado e coberto por teste automatizado. Mas teste de software, no fundo, é uma amostragem: eu escrevo casos pros cenários que consigo imaginar, rodo, e confio que cobri o suficiente. Sempre sobra a pergunta incômoda de "e o caso que eu não pensei?".
 
-Prova formal em Lean não tem esse buraco. Ou o argumento é válido pra qualquer entrada possível, seguindo as regras da lógica, ou não é. É a diferença entre "testei e não quebrou" e "é matematicamente impossível quebrar". Pra um teorema centenário isso é natural. Pra sistema de produção, é praticamente inviável — a maior parte do software não tem especificação formal nem precisa ter.
+Prova formal em Lean não tem esse buraco. Ou o argumento é válido pra qualquer entrada possível, seguindo as regras da lógica, ou não é. É a diferença entre "testei e não quebrou" e "é matematicamente impossível quebrar". Pra um teorema centenário isso é natural. Pra sistema de produção, é praticamente inviável: a maior parte do software não tem especificação formal nem precisa ter.
 
 Mas o gancho que fica é outro: se uma IA consegue automatizar 11 dias de tradução formal que, feita por humano, levaria muito mais tempo e expertise específica, isso baixa o custo de aplicar rigor formal em pedaços menores e mais críticos de sistemas reais. Não o sistema inteiro, mas talvez a parte que calcula desconto, ou a que decide se um lote de dados pode ser processado. Áreas onde "eu acho que testei o suficiente" não é uma resposta satisfatória.
 

@@ -70,11 +70,12 @@ Card de post reutilizado em ambas: `src/components/ArticleCard.astro`.
 1. Primeira pessoa quando fizer sentido. Ex.: "Eu li isso e pensei X".
 2. Nunca abrir com clichê: "No mundo tecnológico de hoje", "Cada vez mais", "Nos últimos anos", "A tecnologia X vem revolucionando" e variações são banidos. Abrir com opinião crua, constatação prática ou pergunta honesta.
 3. 300–450 palavras. Parágrafo de abertura + uma seção `##` de análise técnica + opcionalmente uma seção final com reflexão ou provocação.
-4. Trazer pelo menos uma conexão real com o contexto profissional abaixo — nunca inventar projetos ou opiniões fora dele.
+4. Trazer pelo menos uma conexão real com o contexto profissional abaixo, nunca inventar projetos ou opiniões fora dele.
 5. Sem emoji. Sem listas com bullets, exceto quando essencial. Prefere prosa.
-6. Encerrar com algo humano — opinião, dúvida, provocação. Nunca "Em conclusão" ou "É importante lembrar".
-7. Versão em inglês é reescrita nativa, não tradução literal — mesma ideia, fluidez natural do idioma.
-8. Citar a fonte no frontmatter (`source`, `sourceName`), mas nunca copiar frases longas da notícia — reformular tudo.
+6. Encerrar com algo humano: opinião, dúvida, provocação. Nunca "Em conclusão" ou "É importante lembrar".
+7. Versão em inglês é reescrita nativa, não tradução literal: mesma ideia, fluidez natural do idioma.
+8. Citar a fonte no frontmatter (`source`, `sourceName`), mas nunca copiar frases longas da notícia, sempre reformular.
+9. Nunca usar travessão (—) para intercalar ideias. Preferir ponto, vírgula, dois-pontos ou parênteses.
 
 ### Contexto profissional do Nícolas (pra dar sabor, não fabricar)
 
