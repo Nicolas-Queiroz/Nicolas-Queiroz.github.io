@@ -2,16 +2,45 @@
 
 @theme {
   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-serif: "Source Serif 4", ui-serif, Georgia, serif;
   --font-mono: "JetBrains Mono", ui-monospace, monospace;
 
-  --color-ink: #0f172a;
-  --color-ink-soft: #334155;
-  --color-muted: #64748b;
-  --color-bg: #fafaf9;
+  /* Dark theme is the default look of the site. */
+  --color-ink: #eef0f3;
+  --color-ink-soft: #c7cbd3;
+  --color-muted: #8b93a1;
+  --color-bg: #090c11;
+  --color-bg-soft: #0e1420;
+  --color-card: #131a26;
+  --color-card-hover: #171f2d;
+  --color-accent: #2dd4ee;
+  --color-accent-hover: #7ce7f7;
+  --color-accent-soft: rgba(45, 212, 238, 0.12);
+  --color-border: #212a3a;
+}
+
+:root {
+  color-scheme: dark;
+}
+
+:root[data-theme="light"] {
+  --color-ink: #14171c;
+  --color-ink-soft: #3c4350;
+  --color-muted: #6b7280;
+  --color-bg: #f8f7f4;
+  --color-bg-soft: #f1efe9;
   --color-card: #ffffff;
+  --color-card-hover: #fbfbfa;
   --color-accent: #0891b2;
   --color-accent-hover: #0e7490;
-  --color-border: #e2e8f0;
+  --color-accent-soft: rgba(8, 145, 178, 0.08);
+  --color-border: #e5e2da;
+
+  color-scheme: light;
+}
+
+* {
+  border-color: var(--color-border);
 }
 
 html {
@@ -23,12 +52,38 @@ html {
 
 body {
   min-height: 100vh;
-  antialiased: true;
+  background: var(--color-bg);
+  background-image:
+    radial-gradient(ellipse 900px 500px at 15% -10%, var(--color-accent-soft), transparent),
+    radial-gradient(ellipse 700px 400px at 100% 0%, var(--color-accent-soft), transparent);
+  background-repeat: no-repeat;
+  -webkit-font-smoothing: antialiased;
+  transition: background-color 0.25s ease, color 0.25s ease;
 }
 
+::selection {
+  background: var(--color-accent);
+  color: #06131a;
+}
+
+/* Tag / pill chips used across cards */
+.chip {
+  border-radius: 999px;
+  border: 1px solid var(--color-border);
+  background: var(--color-bg-soft);
+  color: var(--color-muted);
+  padding: 0.2rem 0.65rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  white-space: nowrap;
+}
+
+/* Article / long-form typography */
 .prose-post {
-  max-width: 65ch;
-  line-height: 1.7;
+  max-width: 68ch;
+  line-height: 1.8;
+  color: var(--color-ink-soft);
+  font-size: 1.05rem;
 }
 
 .prose-post p {
@@ -36,38 +91,99 @@ body {
 }
 
 .prose-post h2 {
-  font-size: 1.5rem;
-  font-weight: 700;
-  margin-top: 2rem;
+  font-family: var(--font-serif);
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: var(--color-ink);
+  margin-top: 2.25rem;
   margin-bottom: 0.75rem;
 }
 
 .prose-post h3 {
-  font-size: 1.25rem;
+  font-family: var(--font-serif);
+  font-size: 1.3rem;
   font-weight: 600;
-  margin-top: 1.5rem;
+  color: var(--color-ink);
+  margin-top: 1.75rem;
   margin-bottom: 0.5rem;
+}
+
+.prose-post ul,
+.prose-post ol {
+  padding-left: 1.5rem;
+  margin: 1rem 0;
 }
 
 .prose-post ul {
   list-style: disc;
-  padding-left: 1.5rem;
-  margin: 1rem 0;
+}
+
+.prose-post ol {
+  list-style: decimal;
+}
+
+.prose-post li {
+  margin: 0.4em 0;
+}
+
+.prose-post blockquote {
+  border-left: 3px solid var(--color-accent);
+  padding-left: 1rem;
+  margin: 1.5em 0;
+  color: var(--color-muted);
+  font-style: italic;
 }
 
 .prose-post a {
   color: var(--color-accent);
   text-decoration: underline;
+  text-underline-offset: 2px;
 }
 
 .prose-post a:hover {
   color: var(--color-accent-hover);
 }
 
+.prose-post img {
+  border-radius: 0.75rem;
+  border: 1px solid var(--color-border);
+}
+
 .prose-post code {
-  background: #f1f5f9;
+  background: var(--color-bg-soft);
+  border: 1px solid var(--color-border);
   padding: 0.15em 0.4em;
   border-radius: 4px;
   font-size: 0.9em;
   font-family: var(--font-mono);
+}
+
+.prose-post pre {
+  background: var(--color-bg-soft);
+  border: 1px solid var(--color-border);
+  border-radius: 0.75rem;
+  padding: 1rem;
+  overflow-x: auto;
+}
+
+.prose-post pre code {
+  background: none;
+  border: none;
+  padding: 0;
+}
+
+/* Page transitions (astro:transitions) */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation-duration: 0.22s;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  ::view-transition-old(root),
+  ::view-transition-new(root) {
+    animation: none;
+  }
 }

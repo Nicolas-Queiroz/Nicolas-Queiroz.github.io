@@ -1,4 +1,5 @@
 ---
+import ThemeToggle from './ThemeToggle.astro';
 import { profile } from '../data/profile';
 
 interface Props {
@@ -10,13 +11,15 @@ const { lang } = Astro.props;
 const labels = {
   pt: {
     home: 'Início',
-    news: 'Notícias',
+    news: 'Artigos',
+    about: 'Sobre',
     otherLang: 'EN',
     otherLangPath: '/en',
   },
   en: {
     home: 'Home',
-    news: 'News',
+    news: 'Articles',
+    about: 'About',
     otherLang: 'PT',
     otherLangPath: '/pt',
   },
@@ -24,29 +27,55 @@ const labels = {
 
 const t = labels[lang];
 const basePath = `/${lang}`;
-const newsPath = lang === 'pt' ? '/pt/noticias' : '/en/news';
+const newsPath = lang === 'pt' ? '/pt/artigos' : '/en/articles';
+const aboutPath = lang === 'pt' ? '/pt/sobre' : '/en/about';
+
+const path = new URL(Astro.request.url).pathname.replace(/\/$/, '') || '/';
+const isActive = (href: string) => path === href.replace(/\/$/, '');
 ---
 
-<header class="border-b border-[var(--color-border)] bg-[var(--color-card)]">
+<header
+  class="sticky top-0 z-40 border-b border-[var(--color-border)] bg-[var(--color-bg)]/80 backdrop-blur-md"
+  transition:persist
+>
   <nav class="mx-auto flex max-w-4xl items-center justify-between px-6 py-4">
-    <a href={basePath} class="font-bold text-lg hover:text-[var(--color-accent)]">
+    <a href={basePath} class="font-serif text-lg font-semibold tracking-tight hover:text-[var(--color-accent)]">
       {profile.name.split(' ')[0]} {profile.name.split(' ').slice(-1)}
     </a>
-    <ul class="flex items-center gap-6 text-sm font-medium">
-      <li>
-        <a href={basePath} class="hover:text-[var(--color-accent)]">{t.home}</a>
-      </li>
-      <li>
-        <a href={newsPath} class="hover:text-[var(--color-accent)]">{t.news}</a>
-      </li>
-      <li>
-        <a
-          href={t.otherLangPath}
-          class="rounded border border-[var(--color-border)] px-2 py-1 text-xs uppercase hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]"
-        >
-          {t.otherLang}
-        </a>
-      </li>
-    </ul>
+    <div class="flex items-center gap-1 sm:gap-2">
+      <ul class="flex items-center gap-1 text-sm font-medium sm:gap-2">
+        <li>
+          <a
+            href={basePath}
+            class={`rounded-full px-3 py-1.5 transition ${isActive(basePath) ? 'bg-[var(--color-accent-soft)] text-[var(--color-accent)]' : 'text-[var(--color-ink-soft)] hover:text-[var(--color-accent)]'}`}
+          >
+            {t.home}
+          </a>
+        </li>
+        <li>
+          <a
+            href={newsPath}
+            class={`rounded-full px-3 py-1.5 transition ${isActive(newsPath) ? 'bg-[var(--color-accent-soft)] text-[var(--color-accent)]' : 'text-[var(--color-ink-soft)] hover:text-[var(--color-accent)]'}`}
+          >
+            {t.news}
+          </a>
+        </li>
+        <li>
+          <a
+            href={aboutPath}
+            class={`rounded-full px-3 py-1.5 transition ${isActive(aboutPath) ? 'bg-[var(--color-accent-soft)] text-[var(--color-accent)]' : 'text-[var(--color-ink-soft)] hover:text-[var(--color-accent)]'}`}
+          >
+            {t.about}
+          </a>
+        </li>
+      </ul>
+      <a
+        href={t.otherLangPath}
+        class="rounded-full border border-[var(--color-border)] px-2.5 py-1 text-xs font-semibold uppercase text-[var(--color-ink-soft)] transition hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]"
+      >
+        {t.otherLang}
+      </a>
+      <ThemeToggle lang={lang} />
+    </div>
   </nav>
 </header>

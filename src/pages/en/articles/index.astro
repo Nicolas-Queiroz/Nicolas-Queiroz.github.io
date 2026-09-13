@@ -1,0 +1,28 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import ArticleCard from '../../../components/ArticleCard.astro';
+import { getCollection } from 'astro:content';
+
+const posts = (await getCollection('posts', ({ data }) => data.lang === 'en'))
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+---
+
+<BaseLayout lang="en" title="Articles">
+  <header class="mb-10">
+    <p class="text-xs font-semibold uppercase tracking-widest text-[var(--color-accent)]">Reading</p>
+    <h1 class="mt-2 font-serif text-4xl font-semibold tracking-tight text-[var(--color-ink)]">Articles</h1>
+    <p class="mt-3 max-w-xl text-[var(--color-muted)]">
+      AI-curated feed on backend, cloud, Python, Odoo, and related topics.
+    </p>
+  </header>
+
+  {posts.length === 0 ? (
+    <p class="rounded-xl border border-dashed border-[var(--color-border)] p-6 text-sm italic text-[var(--color-muted)]">
+      No articles published yet. Come back soon.
+    </p>
+  ) : (
+    <div class="grid gap-5 sm:grid-cols-2">
+      {posts.map((post) => <ArticleCard post={post} lang="en" />)}
+    </div>
+  )}
+</BaseLayout>

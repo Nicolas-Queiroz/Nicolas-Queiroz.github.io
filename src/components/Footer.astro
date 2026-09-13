@@ -9,29 +9,29 @@ const { lang } = Astro.props;
 
 const t = {
   pt: {
-    ai: 'Os posts da seção Notícias são curados e escritos por um agente de IA que desenvolvi, com skill própria de seleção. Publicação passa por revisão manual.',
+    ai: 'Os artigos deste site são curados e escritos por um agente de IA que desenvolvi, com skill própria de seleção. Publicação passa por revisão manual.',
     copyright: `© ${new Date().getFullYear()} ${profile.name}. Feito com Astro.`,
   },
   en: {
-    ai: 'News posts are curated and written by an AI agent I developed, with a custom selection skill. Publication goes through manual review.',
+    ai: 'Articles on this site are curated and written by an AI agent I developed, with a custom selection skill. Publication goes through manual review.',
     copyright: `© ${new Date().getFullYear()} ${profile.name}. Built with Astro.`,
   },
 }[lang];
 ---
 
-<footer class="mt-16 border-t border-[var(--color-border)] bg-[var(--color-card)]">
-  <div class="mx-auto max-w-4xl px-6 py-8 text-sm text-[var(--color-muted)]">
-    <p class="mb-3 italic">{t.ai}</p>
-    <div class="flex flex-wrap items-center justify-between gap-4">
+<footer class="mt-20 border-t border-[var(--color-border)] bg-[var(--color-bg-soft)]">
+  <div class="mx-auto max-w-4xl px-6 py-10 text-sm text-[var(--color-muted)]">
+    <p class="mb-4 max-w-2xl italic">{t.ai}</p>
+    <div class="flex flex-wrap items-center justify-between gap-4 border-t border-[var(--color-border)] pt-5">
       <p>{t.copyright}</p>
-      <div class="flex gap-4">
-        <a href={profile.github} target="_blank" rel="noopener" class="hover:text-[var(--color-accent)]">
+      <div class="flex gap-5">
+        <a href={profile.github} target="_blank" rel="noopener" class="transition hover:text-[var(--color-accent)]">
           GitHub
         </a>
-        <a href={profile.linkedin} target="_blank" rel="noopener" class="hover:text-[var(--color-accent)]">
+        <a href={profile.linkedin} target="_blank" rel="noopener" class="transition hover:text-[var(--color-accent)]">
           LinkedIn
         </a>
-        <a href={`mailto:${profile.email}`} class="hover:text-[var(--color-accent)]">
+        <a href={`mailto:${profile.email}`} class="transition hover:text-[var(--color-accent)]">
           Email
         </a>
       </div>

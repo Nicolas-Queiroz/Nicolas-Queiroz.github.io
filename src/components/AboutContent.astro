@@ -1,0 +1,140 @@
+---
+import { profile } from '../data/profile';
+
+interface Props {
+  lang: 'pt' | 'en';
+}
+
+const { lang } = Astro.props;
+
+const t = {
+  pt: {
+    kicker: 'Sobre mim',
+    skills: 'Habilidades',
+    experience: 'Experiência',
+    projects: 'Projetos',
+    education: 'Educação',
+    languages: 'Idiomas',
+    contact: 'Contato',
+    langLabels: {
+      languages: 'Linguagens',
+      frameworks: 'Frameworks',
+      databases: 'Bancos de dados',
+      cloud: 'Cloud & DevOps',
+      integration: 'Integração',
+      tools: 'Ferramentas',
+    },
+  },
+  en: {
+    kicker: 'About me',
+    skills: 'Skills',
+    experience: 'Experience',
+    projects: 'Projects',
+    education: 'Education',
+    languages: 'Languages',
+    contact: 'Contact',
+    langLabels: {
+      languages: 'Languages',
+      frameworks: 'Frameworks',
+      databases: 'Databases',
+      cloud: 'Cloud & DevOps',
+      integration: 'Integration',
+      tools: 'Tools',
+    },
+  },
+}[lang];
+---
+
+<section class="mb-14">
+  <p class="text-xs font-semibold uppercase tracking-widest text-[var(--color-accent)]">{t.kicker}</p>
+  <h1 class="mt-2 font-serif text-4xl font-semibold tracking-tight text-[var(--color-ink)] md:text-5xl">
+    {profile.name}
+  </h1>
+  <p class="mt-2 text-xl text-[var(--color-accent)]">{profile.title[lang]}</p>
+  <p class="mt-1 text-sm text-[var(--color-muted)]">📍 {profile.location}</p>
+  <p class="mt-6 max-w-2xl text-lg leading-relaxed text-[var(--color-ink-soft)]">{profile.bio[lang]}</p>
+</section>
+
+<section class="mb-14">
+  <h2 class="mb-4 font-serif text-xl font-semibold text-[var(--color-ink)]">{t.skills}</h2>
+  <div class="grid gap-5 md:grid-cols-2">
+    {Object.entries(profile.skills).map(([key, values]) => (
+      <div>
+        <h3 class="mb-2 text-xs font-semibold uppercase tracking-wide text-[var(--color-muted)]">
+          {t.langLabels[key as keyof typeof t.langLabels]}
+        </h3>
+        <div class="flex flex-wrap gap-2">
+          {values.map((skill) => (
+            <span class="chip">{skill}</span>
+          ))}
+        </div>
+      </div>
+    ))}
+  </div>
+</section>
+
+<section class="mb-14">
+  <h2 class="mb-4 font-serif text-xl font-semibold text-[var(--color-ink)]">{t.experience}</h2>
+  {profile.experience.map((exp) => (
+    <article class="mb-5 rounded-2xl border border-[var(--color-border)] bg-[var(--color-card)] p-6">
+      <div class="mb-2 flex flex-wrap items-baseline justify-between gap-2">
+        <h3 class="text-lg font-semibold text-[var(--color-ink)]">{exp.role[lang]}</h3>
+        <span class="text-sm text-[var(--color-muted)]">{exp.period}</span>
+      </div>
+      <p class="mb-3 text-sm font-medium text-[var(--color-accent)]">{exp.company}</p>
+      <ul class="space-y-1.5 text-sm text-[var(--color-ink-soft)]">
+        {exp.bullets[lang].map((b) => (
+          <li class="flex gap-2">
+            <span class="text-[var(--color-accent)]">•</span>
+            <span>{b}</span>
+          </li>
+        ))}
+      </ul>
+    </article>
+  ))}
+</section>
+
+<section class="mb-14">
+  <h2 class="mb-4 font-serif text-xl font-semibold text-[var(--color-ink)]">{t.projects}</h2>
+  {profile.projects.map((p) => (
+    <article class="mb-4 rounded-2xl border border-[var(--color-border)] bg-[var(--color-card)] p-6">
+      <h3 class="mb-2 text-lg font-semibold text-[var(--color-ink)]">{p.name}</h3>
+      <p class="mb-3 text-sm text-[var(--color-ink-soft)]">{p.description[lang]}</p>
+      <div class="flex flex-wrap gap-2">
+        {p.tags.map((tag) => (
+          <span class="chip">{tag}</span>
+        ))}
+      </div>
+    </article>
+  ))}
+</section>
+
+<section class="mb-14 grid gap-8 md:grid-cols-2">
+  <div>
+    <h2 class="mb-3 font-serif text-xl font-semibold text-[var(--color-ink)]">{t.education}</h2>
+    <p class="font-medium text-[var(--color-ink)]">{profile.education.course[lang]}</p>
+    <p class="text-sm text-[var(--color-ink-soft)]">{profile.education.school[lang]}</p>
+    <p class="text-sm text-[var(--color-muted)]">{profile.education.period}</p>
+  </div>
+  <div>
+    <h2 class="mb-3 font-serif text-xl font-semibold text-[var(--color-ink)]">{t.languages}</h2>
+    <ul class="space-y-1 text-sm">
+      {profile.languages[lang].map((l) => (
+        <li>
+          <span class="font-medium text-[var(--color-ink)]">{l.name}:</span>{' '}
+          <span class="text-[var(--color-ink-soft)]">{l.level}</span>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+
+<section>
+  <h2 class="mb-3 font-serif text-xl font-semibold text-[var(--color-ink)]">{t.contact}</h2>
+  <ul class="space-y-1.5 text-sm">
+    <li>📧 <a href={`mailto:${profile.email}`} class="text-[var(--color-accent)] hover:underline">{profile.email}</a></li>
+    <li>📱 {profile.phone}</li>
+    <li>💼 <a href={profile.linkedin} target="_blank" rel="noopener" class="text-[var(--color-accent)] hover:underline">LinkedIn</a></li>
+    <li>💻 <a href={profile.github} target="_blank" rel="noopener" class="text-[var(--color-accent)] hover:underline">GitHub</a></li>
+  </ul>
+</section>
