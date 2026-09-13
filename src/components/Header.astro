@@ -1,0 +1,52 @@
+---
+import { profile } from '../data/profile';
+
+interface Props {
+  lang: 'pt' | 'en';
+}
+
+const { lang } = Astro.props;
+
+const labels = {
+  pt: {
+    home: 'Início',
+    news: 'Notícias',
+    otherLang: 'EN',
+    otherLangPath: '/en',
+  },
+  en: {
+    home: 'Home',
+    news: 'News',
+    otherLang: 'PT',
+    otherLangPath: '/pt',
+  },
+};
+
+const t = labels[lang];
+const basePath = `/${lang}`;
+const newsPath = lang === 'pt' ? '/pt/noticias' : '/en/news';
+---
+
+<header class="border-b border-[var(--color-border)] bg-[var(--color-card)]">
+  <nav class="mx-auto flex max-w-4xl items-center justify-between px-6 py-4">
+    <a href={basePath} class="font-bold text-lg hover:text-[var(--color-accent)]">
+      {profile.name.split(' ')[0]} {profile.name.split(' ').slice(-1)}
+    </a>
+    <ul class="flex items-center gap-6 text-sm font-medium">
+      <li>
+        <a href={basePath} class="hover:text-[var(--color-accent)]">{t.home}</a>
+      </li>
+      <li>
+        <a href={newsPath} class="hover:text-[var(--color-accent)]">{t.news}</a>
+      </li>
+      <li>
+        <a
+          href={t.otherLangPath}
+          class="rounded border border-[var(--color-border)] px-2 py-1 text-xs uppercase hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]"
+        >
+          {t.otherLang}
+        </a>
+      </li>
+    </ul>
+  </nav>
+</header>

@@ -1,0 +1,73 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+
+  --color-ink: #0f172a;
+  --color-ink-soft: #334155;
+  --color-muted: #64748b;
+  --color-bg: #fafaf9;
+  --color-card: #ffffff;
+  --color-accent: #0891b2;
+  --color-accent-hover: #0e7490;
+  --color-border: #e2e8f0;
+}
+
+html {
+  background: var(--color-bg);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  scroll-behavior: smooth;
+}
+
+body {
+  min-height: 100vh;
+  antialiased: true;
+}
+
+.prose-post {
+  max-width: 65ch;
+  line-height: 1.7;
+}
+
+.prose-post p {
+  margin: 1.25em 0;
+}
+
+.prose-post h2 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  margin-top: 2rem;
+  margin-bottom: 0.75rem;
+}
+
+.prose-post h3 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-top: 1.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.prose-post ul {
+  list-style: disc;
+  padding-left: 1.5rem;
+  margin: 1rem 0;
+}
+
+.prose-post a {
+  color: var(--color-accent);
+  text-decoration: underline;
+}
+
+.prose-post a:hover {
+  color: var(--color-accent-hover);
+}
+
+.prose-post code {
+  background: #f1f5f9;
+  padding: 0.15em 0.4em;
+  border-radius: 4px;
+  font-size: 0.9em;
+  font-family: var(--font-mono);
+}
