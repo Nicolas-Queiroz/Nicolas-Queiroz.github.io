@@ -30,6 +30,10 @@ const pageDescription = description ?? profile.bio[lang];
     <title>{pageTitle}</title>
     <meta name="description" content={pageDescription} />
 
+    <!-- Conteúdo (posts) muda a qualquer novo deploy: impede o ClientRouter
+         de servir uma versão em cache da página numa navegação por link. -->
+    <meta http-equiv="Cache-Control" content="no-cache" />
+
     <!-- Open Graph -->
     <meta property="og:type" content="website" />
     <meta property="og:title" content={pageTitle} />
