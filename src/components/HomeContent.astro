@@ -11,26 +11,26 @@ const { lang } = Astro.props;
 
 const t = {
   pt: {
-    kicker: 'Portfólio & artigos',
+    kicker: 'Portfólio & blog',
     tagline: 'Escrevo sobre backend, cloud e o que aprendo construindo software no dia a dia.',
-    readArticles: 'Ver artigos',
+    readArticles: 'Ver o blog',
     aboutMe: 'Sobre mim',
-    latest: 'Últimos artigos',
-    seeAll: 'Ver todos os artigos →',
-    empty: 'Ainda não há artigos publicados. Volte em breve.',
+    latest: 'Últimos posts',
+    seeAll: 'Ver todos os posts →',
+    empty: 'Ainda não há posts publicados. Volte em breve.',
   },
   en: {
-    kicker: 'Portfolio & writing',
+    kicker: 'Portfolio & blog',
     tagline: 'I write about backend, cloud, and what I learn building software day to day.',
-    readArticles: 'Read articles',
+    readArticles: 'Read the blog',
     aboutMe: 'About me',
-    latest: 'Latest articles',
-    seeAll: 'See all articles →',
-    empty: 'No articles published yet. Check back soon.',
+    latest: 'Latest posts',
+    seeAll: 'See all posts →',
+    empty: 'No posts published yet. Check back soon.',
   },
 }[lang];
 
-const articlesPath = lang === 'pt' ? '/pt/artigos' : '/en/articles';
+const articlesPath = `/${lang}/blog`;
 const aboutPath = lang === 'pt' ? '/pt/sobre' : '/en/about';
 
 const posts = (await getCollection('posts', ({ data }) => data.lang === lang))

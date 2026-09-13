@@ -1,11 +1,12 @@
 ---
 import { getCollection, render } from 'astro:content';
 import BaseLayout from '../../../layouts/BaseLayout.astro';
+import BackButton from '../../../components/BackButton.astro';
 
 export async function getStaticPaths() {
-  const posts = await getCollection('posts', ({ data }) => data.lang === 'en');
+  const posts = await getCollection('posts', ({ data }) => data.lang === 'pt');
   return posts.map((post) => ({
-    params: { slug: post.id.replace('en/', '') },
+    params: { slug: post.id.replace('pt/', '') },
     props: { post },
   }));
 }
@@ -14,12 +15,19 @@ const { post } = Astro.props;
 const { Content } = await render(post);
 ---
 
-<BaseLayout lang="en" title={post.data.title} description={post.data.description}>
+<BaseLayout lang="pt" title={post.data.title} description={post.data.description}>
   <article>
     <header class="mb-10">
-      <a href="/en/articles" class="text-sm text-[var(--color-accent)] hover:underline">← All articles</a>
-      <time datetime={post.data.pubDate.toISOString()} class="mt-4 block text-sm text-[var(--color-muted)]">
-        {post.data.pubDate.toLocaleDateString('en-US', {
+      <BackButton href="/pt/blog" label="Todos os posts" />
+      {post.data.image && (
+        <img
+          src={post.data.image}
+          alt={post.data.title}
+          class="mb-6 h-64 w-full rounded-xl border border-[var(--color-border)] object-cover md:h-80"
+        />
+      )}
+      <time datetime={post.data.pubDate.toISOString()} class="block text-sm text-[var(--color-muted)]">
+        {post.data.pubDate.toLocaleDateString('pt-BR', {
           day: '2-digit', month: 'long', year: 'numeric',
         })}
       </time>
@@ -41,7 +49,7 @@ const { Content } = await render(post);
     {post.data.source && (
       <footer class="mt-10 border-t border-[var(--color-border)] pt-4 text-sm text-[var(--color-muted)]">
         <p>
-          Original source:{' '}
+          Fonte original:{' '}
           <a href={post.data.source} target="_blank" rel="noopener" class="text-[var(--color-accent)] hover:underline">
             {post.data.sourceName ?? post.data.source}
           </a>
@@ -50,9 +58,7 @@ const { Content } = await render(post);
     )}
 
     <div class="mt-8">
-      <a href="/en/articles" class="text-sm text-[var(--color-accent)] hover:underline">
-        ← Back to all articles
-      </a>
+      <BackButton href="/pt/blog" label="Voltar para o blog" />
     </div>
   </article>
 </BaseLayout>

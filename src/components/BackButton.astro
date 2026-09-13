@@ -1,0 +1,34 @@
+---
+interface Props {
+  href: string;
+  label: string;
+}
+
+const { href, label } = Astro.props;
+---
+
+<a
+  href={href}
+  data-back-link
+  class="mb-6 inline-flex items-center gap-1.5 text-sm font-medium text-[var(--color-muted)] transition hover:text-[var(--color-accent)]"
+>
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4">
+    <path d="M19 12H5M12 19l-7-7 7-7"></path>
+  </svg>
+  {label}
+</a>
+
+<script data-astro-rerun is:inline>
+  function initBackLinks() {
+    document.querySelectorAll('[data-back-link]').forEach(function (el) {
+      el.onclick = function (e) {
+        if (window.history.state && window.history.length > 1) {
+          e.preventDefault();
+          window.history.back();
+        }
+      };
+    });
+  }
+
+  initBackLinks();
+</script>

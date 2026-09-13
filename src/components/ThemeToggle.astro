@@ -23,13 +23,13 @@ const label = lang === 'pt' ? 'Alternar tema' : 'Toggle theme';
   </svg>
 </button>
 
-<script>
-  function applyIcon(theme: string) {
-    document.querySelectorAll('#theme-toggle').forEach((btn) => {
-      const sun = btn.querySelector('[data-icon="sun"]');
-      const moon = btn.querySelector('[data-icon="moon"]');
-      sun?.classList.toggle('hidden', theme !== 'dark');
-      moon?.classList.toggle('hidden', theme === 'dark');
+<script data-astro-rerun is:inline>
+  function applyIcon(theme) {
+    document.querySelectorAll('#theme-toggle').forEach(function (btn) {
+      var sun = btn.querySelector('[data-icon="sun"]');
+      var moon = btn.querySelector('[data-icon="moon"]');
+      if (sun) sun.classList.toggle('hidden', theme !== 'dark');
+      if (moon) moon.classList.toggle('hidden', theme === 'dark');
     });
   }
 
@@ -37,18 +37,32 @@ const label = lang === 'pt' ? 'Alternar tema' : 'Toggle theme';
     return document.documentElement.getAttribute('data-theme') === 'light' ? 'light' : 'dark';
   }
 
-  function init() {
-    applyIcon(currentTheme());
-    document.querySelectorAll('#theme-toggle').forEach((btn) => {
-      btn.addEventListener('click', () => {
-        const next = currentTheme() === 'dark' ? 'light' : 'dark';
+  // Astro's ClientRouter resets <html> attributes to match the freshly
+  // fetched page on every soft navigation, wiping data-theme. The <head>
+  // init script doesn't re-run because its content is identical on every
+  // page, so we re-sync from localStorage here instead, every navigation.
+  function syncThemeFromStorage() {
+    var stored = localStorage.getItem('theme');
+    var theme = stored === 'light' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', theme);
+    return theme;
+  }
+
+  function initThemeToggle() {
+    applyIcon(syncThemeFromStorage());
+    document.querySelectorAll('#theme-toggle').forEach(function (btn) {
+      // Astro's router can reuse this DOM node across soft navigations and
+      // reset our data attributes without removing old listeners, so we
+      // assign onclick (always replaces) instead of addEventListener
+      // (would stack a second handler and cancel the toggle out).
+      btn.onclick = function () {
+        var next = currentTheme() === 'dark' ? 'light' : 'dark';
         document.documentElement.setAttribute('data-theme', next);
         localStorage.setItem('theme', next);
         applyIcon(next);
-      });
+      };
     });
   }
 
-  init();
-  document.addEventListener('astro:after-swap', init);
+  initThemeToggle();
 </script>

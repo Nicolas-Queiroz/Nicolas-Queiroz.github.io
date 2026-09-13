@@ -11,33 +11,45 @@ const { lang } = Astro.props;
 const labels = {
   pt: {
     home: 'Início',
-    news: 'Artigos',
+    blog: 'Blog',
     about: 'Sobre',
     otherLang: 'EN',
-    otherLangPath: '/en',
   },
   en: {
     home: 'Home',
-    news: 'Articles',
+    blog: 'Blog',
     about: 'About',
     otherLang: 'PT',
-    otherLangPath: '/pt',
   },
 };
 
 const t = labels[lang];
 const basePath = `/${lang}`;
-const newsPath = lang === 'pt' ? '/pt/artigos' : '/en/articles';
+const blogPath = `/${lang}/blog`;
 const aboutPath = lang === 'pt' ? '/pt/sobre' : '/en/about';
 
 const path = new URL(Astro.request.url).pathname.replace(/\/$/, '') || '/';
-const isActive = (href: string) => path === href.replace(/\/$/, '');
+// Home só fica ativo em match exato — senão "/pt" (prefixo de tudo) ficaria
+// sempre marcado junto com a seção atual.
+const isActive = (href: string, exact = false) => {
+  const clean = href.replace(/\/$/, '');
+  return exact ? path === clean : path === clean || path.startsWith(`${clean}/`);
+};
+
+// Preserva a seção atual ao trocar de idioma (a página exata pode não existir
+// no outro idioma, ex.: slugs de posts diferem, então cai no índice da seção).
+function otherLangHref(): string {
+  const other = lang === 'pt' ? 'en' : 'pt';
+  if (path === basePath) return `/${other}`;
+  if (path.startsWith(aboutPath)) return other === 'pt' ? '/pt/sobre' : '/en/about';
+  if (path.startsWith(blogPath)) return `/${other}/blog`;
+  return `/${other}`;
+}
+
+const otherLangPath = otherLangHref();
 ---
 
-<header
-  class="sticky top-0 z-40 border-b border-[var(--color-border)] bg-[var(--color-bg)]/80 backdrop-blur-md"
-  transition:persist
->
+<header class="sticky top-0 z-40 border-b border-[var(--color-border)] bg-[var(--color-bg)]/80 backdrop-blur-md">
   <nav class="mx-auto flex max-w-4xl items-center justify-between px-6 py-4">
     <a href={basePath} class="font-serif text-lg font-semibold tracking-tight hover:text-[var(--color-accent)]">
       {profile.name.split(' ')[0]} {profile.name.split(' ').slice(-1)}
@@ -47,22 +59,25 @@ const isActive = (href: string) => path === href.replace(/\/$/, '');
         <li>
           <a
             href={basePath}
-            class={`rounded-full px-3 py-1.5 transition ${isActive(basePath) ? 'bg-[var(--color-accent-soft)] text-[var(--color-accent)]' : 'text-[var(--color-ink-soft)] hover:text-[var(--color-accent)]'}`}
+            aria-current={isActive(basePath, true) ? 'page' : undefined}
+            class={`rounded-full px-3 py-1.5 transition ${isActive(basePath, true) ? 'bg-[var(--color-accent-soft)] text-[var(--color-accent)]' : 'text-[var(--color-ink-soft)] hover:text-[var(--color-accent)]'}`}
           >
             {t.home}
           </a>
         </li>
         <li>
           <a
-            href={newsPath}
-            class={`rounded-full px-3 py-1.5 transition ${isActive(newsPath) ? 'bg-[var(--color-accent-soft)] text-[var(--color-accent)]' : 'text-[var(--color-ink-soft)] hover:text-[var(--color-accent)]'}`}
+            href={blogPath}
+            aria-current={isActive(blogPath) ? 'page' : undefined}
+            class={`rounded-full px-3 py-1.5 transition ${isActive(blogPath) ? 'bg-[var(--color-accent-soft)] text-[var(--color-accent)]' : 'text-[var(--color-ink-soft)] hover:text-[var(--color-accent)]'}`}
           >
-            {t.news}
+            {t.blog}
           </a>
         </li>
         <li>
           <a
             href={aboutPath}
+            aria-current={isActive(aboutPath) ? 'page' : undefined}
             class={`rounded-full px-3 py-1.5 transition ${isActive(aboutPath) ? 'bg-[var(--color-accent-soft)] text-[var(--color-accent)]' : 'text-[var(--color-ink-soft)] hover:text-[var(--color-accent)]'}`}
           >
             {t.about}
@@ -70,7 +85,7 @@ const isActive = (href: string) => path === href.replace(/\/$/, '');
         </li>
       </ul>
       <a
-        href={t.otherLangPath}
+        href={otherLangPath}
         class="rounded-full border border-[var(--color-border)] px-2.5 py-1 text-xs font-semibold uppercase text-[var(--color-ink-soft)] transition hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]"
       >
         {t.otherLang}

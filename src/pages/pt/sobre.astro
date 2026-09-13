@@ -1,8 +1,10 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import AboutContent from '../../components/AboutContent.astro';
+import BackButton from '../../components/BackButton.astro';
 ---
 
 <BaseLayout lang="pt" title="Sobre">
+  <BackButton href="/pt" label="Início" />
   <AboutContent lang="pt" />
 </BaseLayout>
