@@ -36,7 +36,7 @@ Isso gera rascunhos em `drafts/pt/` e `drafts/en/` — nunca publica direto.
 
 - Posts publicados: `src/content/posts/pt/` e `src/content/posts/en/`
 - Rascunhos do bot (pré-revisão): `drafts/pt/` e `drafts/en/`
-- Imagens de capa: `public/posts-images/`
+- Capas: geradas automaticamente por `src/components/PostCover.astro` (placa de circuito derivada da seed do post). Imagem manual opcional em `public/posts-images/`
 - Dados pessoais (bio, skills, experiência): `src/data/profile.ts`
 
 Schema do frontmatter (`src/content.config.ts`):
@@ -48,7 +48,7 @@ lang: "pt" | "en"       # obrigatório
 tags: string[]          # opcional, default []
 source: string (URL)    # opcional
 sourceName: string      # opcional
-image: string           # opcional, ex.: "/posts-images/slug.svg"
+image: string           # opcional, substitui a capa gerada. Ex.: "/posts-images/slug.png"
 ```
 
 Rotas dinâmicas que renderizam os posts: `src/pages/pt/blog/[...slug].astro`
@@ -61,7 +61,8 @@ Card de post reutilizado em ambas: `src/components/ArticleCard.astro`.
 - Nome de arquivo de post: `AAAA-MM-DD-slug.md`
 - Slug: kebab-case, sem acento, curto (~50 caracteres)
 - Todo post em PT deve ter equivalente em EN (mesma data, slug pode diferir por idioma — a UI não assume slugs iguais entre `pt/` e `en/`)
-- Imagem de capa: SVG em `public/posts-images/AAAA-MM-DD-slug.svg`, referenciado no frontmatter como `image: "/posts-images/AAAA-MM-DD-slug.svg"`
+- Capa de post: não criar SVG à mão. Sem `image` no frontmatter, a página do post gera a capa com as peças de circuito (`src/lib/circuit.ts`), já nas cores do tema claro e escuro. A seed é `source` (ou o id do arquivo), então preencher `source` faz PT e EN terem a mesma capa e o mesmo carimbo. Só usar `image` quando houver uma imagem real que agregue (foto, diagrama, print)
+- Identidade visual: peças de circuito (trilhas, chips, nós) na paleta `--color-tile-*`; peça ligada ao agente (bloco vermelho) fica azul com trilha amarela, desligada fica apagada. Reutilizar `Tile`, `TileStamp`, `TileWall` e `PostCover` em vez de criar gráficos novos
 - Cores sempre via as variáveis de `src/styles/global.css` (`var(--color-accent)`, `--color-ink`, `--color-bg`, `--color-card`, `--color-border`, etc.) — nunca hardcode hex ou classes de cor fixas do Tailwind
 - Layout base é sempre `src/layouts/BaseLayout.astro`
 

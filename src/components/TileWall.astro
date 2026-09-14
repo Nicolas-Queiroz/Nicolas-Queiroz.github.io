@@ -1,38 +1,116 @@
 ---
 import Tile from './Tile.astro';
-import { makeTiles } from '../lib/tiles';
+import { makeCircuit } from '../lib/circuit';
 
 interface Props {
   lang: 'pt' | 'en';
 }
 
 const { lang } = Astro.props;
-const tiles = makeTiles('brasilia', 16);
 
-const caption = {
-  pt: 'Azulejos à moda de Athos Bulcão. Clique para girar.',
-  en: 'Tiles in the manner of Athos Bulcão. Click to turn them.',
+const COLS = 4;
+const pieces = makeCircuit('nicolas', COLS, 4, { routes: 2, maxLive: 0.4, scramble: true, scrambleRate: 0.8 });
+const liveCount = pieces.filter((p) => p.live).length;
+
+const t = {
+  pt: {
+    hint: 'Gire as peças para ligar cada módulo ao agente, o bloco vermelho.',
+    progress: '{n} de {total} ligados',
+    done: 'Circuito completo. Todos os módulos falam com o agente.',
+    rotate: (i: number) => `Girar peça ${i}`,
+  },
+  en: {
+    hint: 'Turn the pieces to wire every module to the agent, the red block.',
+    progress: '{n} of {total} wired',
+    done: 'Circuit complete. Every module reaches the agent.',
+    rotate: (i: number) => `Rotate piece ${i}`,
+  },
 }[lang];
+
+const format = (template: string, n: number) => template.replace('{n}', String(n)).replace('{total}', String(pieces.length));
 ---
 
-<figure class="tile-wall-figure">
-  <div class="tile-wall" data-tile-wall aria-hidden="true">
-    {tiles.map((tile, i) => <Tile tile={tile} index={i} />)}
+<figure class="max-w-[20rem] md:max-w-none">
+  <div class="tile-wall" data-circuit data-cols={COLS}>
+    {pieces.map((piece, i) => <Tile piece={piece} index={i} label={t.rotate(i + 1)} />)}
   </div>
-  <figcaption class="mt-3 text-xs text-[var(--color-muted)]">{caption}</figcaption>
+  <figcaption class="mt-3 text-xs leading-relaxed text-[var(--color-muted)]">
+    <span class="block">{t.hint}</span>
+    <span
+      class="mt-1 block font-medium tabular-nums text-[var(--color-ink-soft)]"
+      data-circuit-status
+      data-progress={t.progress}
+      data-done={t.done}
+      aria-live="polite"
+    >
+      {format(t.progress, liveCount)}
+    </span>
+  </figcaption>
 </figure>
 
 <script data-astro-rerun is:inline>
-  function initTileWalls() {
-    document.querySelectorAll('[data-tile-wall] .tile').forEach(function (tile) {
-      // onclick (não addEventListener) para não empilhar handlers entre navegações do ClientRouter.
-      tile.onclick = function () {
-        var next = Number(tile.dataset.rotation || 0) + 90;
-        tile.dataset.rotation = String(next);
-        tile.style.setProperty('--r', next + 'deg');
-      };
+  // Mesma busca de connectedToSource (src/lib/circuit.ts), no navegador.
+  function initCircuits() {
+    var DIRS = [
+      [1, 0, -1, 4],
+      [2, 1, 0, 8],
+      [4, 0, 1, 1],
+      [8, -1, 0, 2],
+    ];
+
+    document.querySelectorAll('[data-circuit]').forEach(function (wall) {
+      var cols = Number(wall.dataset.cols);
+      var tiles = Array.prototype.slice.call(wall.querySelectorAll('[data-piece]'));
+      var rows = tiles.length / cols;
+      var status = wall.parentElement.querySelector('[data-circuit-status]');
+
+      function currentMask(tile) {
+        var m = Number(tile.dataset.mask);
+        var q = ((Number(tile.dataset.rotation) / 90) % 4 + 4) % 4;
+        for (var i = 0; i < q; i++) m = ((m << 1) | (m >> 3)) & 15;
+        return m;
+      }
+
+      function update() {
+        var masks = tiles.map(currentMask);
+        var source = tiles.findIndex(function (t) { return t.dataset.node === 'source'; });
+        var seen = new Set([source]);
+        var stack = [source];
+        while (stack.length) {
+          var i = stack.pop();
+          var x = i % cols;
+          var y = Math.floor(i / cols);
+          DIRS.forEach(function (d) {
+            var nx = x + d[1];
+            var ny = y + d[2];
+            if (!(masks[i] & d[0]) || nx < 0 || nx >= cols || ny < 0 || ny >= rows) return;
+            var j = ny * cols + nx;
+            if (seen.has(j) || !(masks[j] & d[3])) return;
+            seen.add(j);
+            stack.push(j);
+          });
+        }
+        tiles.forEach(function (t, i) { t.classList.toggle('is-live', seen.has(i)); });
+        var complete = seen.size === tiles.length;
+        wall.classList.toggle('is-complete', complete);
+        if (status) {
+          status.textContent = complete
+            ? status.dataset.done
+            : status.dataset.progress.replace('{n}', seen.size).replace('{total}', tiles.length);
+        }
+      }
+
+      tiles.forEach(function (tile) {
+        // onclick (não addEventListener) para não empilhar handlers entre navegações do ClientRouter.
+        tile.onclick = function () {
+          var next = Number(tile.dataset.rotation || 0) + 90;
+          tile.dataset.rotation = String(next);
+          tile.style.setProperty('--r', next + 'deg');
+          update();
+        };
+      });
     });
   }
 
-  initTileWalls();
+  initCircuits();
 </script>

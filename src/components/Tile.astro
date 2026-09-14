@@ -1,53 +1,29 @@
 ---
-import type { TileSpec } from '../lib/tiles';
+import CircuitShape from './CircuitShape.astro';
+import type { Piece } from '../lib/circuit';
 
 interface Props {
-  tile: TileSpec;
+  piece: Piece;
   index?: number;
+  // Rótulo acessível: quando presente, a peça vira um botão que gira.
+  label?: string;
 }
 
-const { tile, index = 0 } = Astro.props;
-const fill = (c: string) => `fill: var(--color-tile-${c})`;
+const { piece, index = 0, label } = Astro.props;
+const Tag = label ? 'button' : 'span';
 ---
 
-<span class="tile" style={`--r: ${tile.rotation}deg; --i: ${index}`} data-rotation={tile.rotation}>
+<Tag
+  class:list={['tile', { 'is-live': piece.live }]}
+  style={`--r: ${piece.rotation}deg; --i: ${index}`}
+  type={label ? 'button' : undefined}
+  aria-label={label}
+  data-piece={label ? '' : undefined}
+  data-mask={piece.mask}
+  data-rotation={piece.rotation}
+  data-node={piece.node}
+>
   <svg viewBox="0 0 100 100" aria-hidden="true" focusable="false">
-    <rect width="100" height="100" style={fill(tile.ground)} />
-    {tile.pattern === 0 && (
-      <>
-        <path d="M0 0H100A100 100 0 0 1 0 100Z" style={fill(tile.figure)} />
-        <circle cx="0" cy="0" r="34" style={fill(tile.detail)} />
-      </>
-    )}
-    {tile.pattern === 1 && (
-      <>
-        <path d="M0 0H100L0 100Z" style={fill(tile.figure)} />
-        <circle cx="72" cy="72" r="12" style={fill(tile.detail)} />
-      </>
-    )}
-    {tile.pattern === 2 && (
-      <>
-        <path d="M0 100A50 50 0 0 1 100 100Z" style={fill(tile.figure)} />
-        <rect width="100" height="18" style={fill(tile.detail)} />
-      </>
-    )}
-    {tile.pattern === 3 && (
-      <>
-        <rect width="100" height="50" style={fill(tile.figure)} />
-        <circle cx="50" cy="75" r="14" style={fill(tile.detail)} />
-      </>
-    )}
-    {tile.pattern === 4 && (
-      <>
-        <circle cx="50" cy="50" r="36" style={fill(tile.figure)} />
-        <circle cx="50" cy="50" r="15" style={fill(tile.detail)} />
-      </>
-    )}
-    {tile.pattern === 5 && (
-      <>
-        <path d="M0 0H50A50 50 0 0 1 0 50Z" style={fill(tile.figure)} />
-        <path d="M100 100H50A50 50 0 0 1 100 50Z" style={fill(tile.detail)} />
-      </>
-    )}
+    <CircuitShape piece={piece} />
   </svg>
-</span>
+</Tag>

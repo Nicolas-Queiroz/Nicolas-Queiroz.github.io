@@ -24,12 +24,14 @@
 :root {
   --color-on-accent: #1d1604;
 
-  /* Azulejos (Athos Bulcão): azul e branco com acentos. */
+  /* Peças de circuito: desligadas ficam apagadas, ligadas ao agente acendem. */
   --color-tile-blue: #3f6df6;
   --color-tile-paper: #eef1fa;
   --color-tile-yellow: #ffc83d;
   --color-tile-green: #2cb67d;
   --color-tile-red: #ef476f;
+  --color-piece-off: #1a2653;
+  --color-trace-off: #4d5d96;
   --color-grout: #0a1126;
 
   color-scheme: dark;
@@ -54,6 +56,8 @@
   --color-tile-yellow: #f5b301;
   --color-tile-green: #1f9d68;
   --color-tile-red: #e0395f;
+  --color-piece-off: #ffffff;
+  --color-trace-off: #b3bde0;
   --color-grout: #d6dcef;
 
   color-scheme: light;
@@ -137,6 +141,7 @@ body {
 
 /* Tag chips */
 .chip {
+  font-family: var(--font-mono);
   border-radius: 4px;
   background: var(--color-bg-soft);
   color: var(--color-ink-soft);
@@ -146,7 +151,7 @@ body {
   white-space: nowrap;
 }
 
-/* ---- Azulejos ---------------------------------------------------------- */
+/* ---- Peças de circuito ------------------------------------------------ */
 
 .tile {
   display: block;
@@ -163,25 +168,79 @@ body {
   height: 100%;
 }
 
+.piece-ground {
+  fill: var(--color-piece-off);
+  transition: fill 0.3s ease;
+}
+
+.trace {
+  stroke: var(--color-trace-off);
+  transition: stroke 0.3s ease;
+}
+
+.trace-fill {
+  fill: var(--color-trace-off);
+  transition: fill 0.3s ease;
+}
+
+.node-chip {
+  fill: var(--color-tile-green);
+}
+
+.node-source {
+  fill: var(--color-tile-red);
+}
+
+.node-source-core {
+  fill: var(--color-tile-paper);
+}
+
+.cover-grout {
+  fill: var(--color-grout);
+}
+
+/* Ligado ao agente, ou carimbo de um post apontado/focado. */
+.is-live .piece-ground,
+.group:hover .tile-stamp .piece-ground,
+.group:focus-visible .tile-stamp .piece-ground {
+  fill: var(--color-tile-blue);
+}
+
+.is-live .trace,
+.group:hover .tile-stamp .trace,
+.group:focus-visible .tile-stamp .trace {
+  stroke: var(--color-tile-yellow);
+}
+
+.is-live .trace-fill,
+.group:hover .tile-stamp .trace-fill,
+.group:focus-visible .tile-stamp .trace-fill {
+  fill: var(--color-tile-yellow);
+}
+
 .tile-wall {
   display: grid;
-  grid-template-columns: repeat(8, minmax(0, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 3px;
   padding: 3px;
   border-radius: 6px;
   background: var(--color-grout);
+  transition: background-color 0.5s ease;
 }
 
-@media (min-width: 768px) {
-  .tile-wall {
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-  }
+.tile-wall.is-complete {
+  background: var(--color-accent);
 }
 
 .tile-wall .tile {
   cursor: pointer;
   animation: tile-in 0.6s cubic-bezier(0.34, 1.3, 0.64, 1) backwards;
   animation-delay: calc(var(--i) * 45ms + 120ms);
+}
+
+.tile-wall .tile:focus-visible {
+  outline-offset: -3px;
+  outline-width: 3px;
 }
 
 @keyframes tile-in {
@@ -200,12 +259,6 @@ body {
   background: var(--color-grout);
   flex-shrink: 0;
   align-self: start;
-}
-
-/* O carimbo gira dois azulejos quando o post é apontado ou focado. */
-.group:hover .tile-stamp .tile:nth-child(3n + 1),
-.group:focus-visible .tile-stamp .tile:nth-child(3n + 1) {
-  transform: rotate(calc(var(--r, 0deg) + 90deg));
 }
 
 /* ---- Article / long-form typography ----------------------------------- */
@@ -341,7 +394,11 @@ body {
     animation: none;
   }
   .tile,
-  .tile-wall .tile {
+  .tile-wall .tile,
+  .tile-wall,
+  .piece-ground,
+  .trace,
+  .trace-fill {
     animation: none;
     transition: none;
   }

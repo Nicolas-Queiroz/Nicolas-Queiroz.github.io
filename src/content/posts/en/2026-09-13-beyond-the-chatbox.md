@@ -4,7 +4,6 @@ description: "The 'Beyond the Chatbox' framework argues for task-specific screen
 pubDate: 2026-09-13
 tags: ["AI", "MCP", "APIs"]
 lang: "en"
-image: "/posts-images/2026-09-13-alem-do-chatbox.svg"
 ---
 
 A design agency put out a framework called "Beyond the Chatbox" arguing for something that, to me, should've been obvious for a while: if an AI agent is going to take a real action in your system, a generic text box is almost always the worst possible interface for that. The pitch is to make the agent's reasoning visible, add human approval checkpoints, and use task-specific screens (a form here, a table there) instead of dumping everything back as one long chat reply. The prediction cited is that by the end of 2026 about 40% of enterprise applications will include AI agents for specific tasks, up from less than 5% in 2025.

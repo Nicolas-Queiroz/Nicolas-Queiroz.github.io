@@ -4,7 +4,6 @@ description: "A McKinsey survey found nearly a third of companies skipped buying
 pubDate: 2026-09-13
 tags: ["AI", "Backend", "Cloud"]
 lang: "en"
-image: "/posts-images/2026-09-13-agentes-codificacao-orcamento.svg"
 ---
 
 This doesn't surprise me at all, and I think that's exactly why it's worth sitting with for a second. McKinsey surveyed a bunch of organizations and found that nearly a third of them decided not to buy at least one software product or feature because they could build the same thing internally using AI coding agents.

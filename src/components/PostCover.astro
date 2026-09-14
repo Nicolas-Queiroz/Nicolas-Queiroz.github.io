@@ -1,0 +1,43 @@
+---
+// Capa gerada do post: uma placa de circuito com rotas acesas saindo do agente.
+// Usa as mesmas peças do carimbo, então acompanha o tema claro/escuro.
+import CircuitShape from './CircuitShape.astro';
+import { makeCircuit } from '../lib/circuit';
+
+interface Props {
+  seed: string;
+  class?: string;
+}
+
+const { seed, class: className = '' } = Astro.props;
+
+const COLS = 10;
+const ROWS = 5;
+const CELL = 100;
+const GAP = 4;
+
+const pieces = makeCircuit(seed, COLS, ROWS, { routes: 3, maxLive: 0.4 });
+const width = COLS * (CELL + GAP) + GAP;
+const height = ROWS * (CELL + GAP) + GAP;
+---
+
+<svg
+  class={`post-cover block h-auto w-full ${className}`}
+  viewBox={`0 0 ${width} ${height}`}
+  aria-hidden="true"
+  focusable="false"
+>
+  <rect class="cover-grout" width={width} height={height} rx="10" />
+  {pieces.map((piece, i) => (
+    <svg
+      x={GAP + (i % COLS) * (CELL + GAP)}
+      y={GAP + Math.floor(i / COLS) * (CELL + GAP)}
+      width={CELL}
+      height={CELL}
+      viewBox="0 0 100 100"
+      class:list={{ 'is-live': piece.live }}
+    >
+      <CircuitShape piece={piece} />
+    </svg>
+  ))}
+</svg>

@@ -4,7 +4,6 @@ description: "Pesquisa da McKinsey mostra que quase um terço das empresas desis
 pubDate: 2026-09-13
 tags: ["AI", "Backend", "Cloud"]
 lang: "pt"
-image: "/posts-images/2026-09-13-agentes-codificacao-orcamento.svg"
 ---
 
 Isso não me surpreende nem um pouco, e acho que é exatamente por isso que vale parar pra pensar. A McKinsey fez um levantamento e descobriu que quase um terço das organizações pesquisadas decidiu não comprar pelo menos um produto ou funcionalidade de software porque conseguiu construir a mesma coisa internamente usando agentes de codificação com IA.

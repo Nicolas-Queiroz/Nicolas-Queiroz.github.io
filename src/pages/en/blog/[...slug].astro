@@ -3,6 +3,7 @@ import { getCollection, render } from 'astro:content';
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import BackButton from '../../../components/BackButton.astro';
 import TileStamp from '../../../components/TileStamp.astro';
+import PostCover from '../../../components/PostCover.astro';
 
 export async function getStaticPaths() {
   const posts = await getCollection('posts', ({ data }) => data.lang === 'en');
@@ -21,7 +22,7 @@ const { Content } = await render(post);
     <header class="mb-12">
       <BackButton href="/en/blog" label="All posts" />
       <div class="flex items-center gap-4">
-        <TileStamp seed={post.id} class="w-10" />
+        <TileStamp seed={post.data.source ?? post.id} class="w-10" />
         <time datetime={post.data.pubDate.toISOString()} class="text-sm text-[var(--color-muted)]">
           {post.data.pubDate.toLocaleDateString('en-US', {
             day: 'numeric', month: 'long', year: 'numeric',
@@ -37,12 +38,14 @@ const { Content } = await render(post);
           ))}
         </div>
       )}
-      {post.data.image && (
+      {post.data.image ? (
         <img
           src={post.data.image}
           alt=""
           class="mt-10 aspect-[1200/630] w-full rounded-md border border-[var(--color-border)] object-cover"
         />
+      ) : (
+        <PostCover seed={post.data.source ?? post.id} class="mt-10" />
       )}
     </header>
 

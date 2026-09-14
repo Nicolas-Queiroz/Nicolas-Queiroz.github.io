@@ -4,7 +4,6 @@ description: "A Anthropic diz que o Claude traduziu uma prova do Último Teorema
 pubDate: 2026-09-13
 tags: ["AI", "LLMs", "MCP"]
 lang: "pt"
-image: "/posts-images/2026-09-13-prova-fermat-lean.svg"
 ---
 
 Fico pensando no seguinte: se uma IA leva 11 dias pra traduzir uma prova inteira do Último Teorema de Fermat pra Lean e sair do outro lado com um resultado verificado por computador, o que muda de verdade não é só "a IA sabe matemática". É a régua do que a gente chama de verificado.

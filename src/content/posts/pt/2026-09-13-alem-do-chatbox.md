@@ -4,7 +4,6 @@ description: "Framework 'Beyond the Chatbox' defende telas específicas e racioc
 pubDate: 2026-09-13
 tags: ["AI", "MCP", "APIs"]
 lang: "pt"
-image: "/posts-images/2026-09-13-alem-do-chatbox.svg"
 ---
 
 Uma agência de design lançou um framework chamado "Beyond the Chatbox" defendendo algo que, pra mim, devia ser óbvio há tempo: se um agente de IA vai tomar uma ação real no seu sistema, uma caixinha de texto genérica é quase sempre a pior interface possível pra isso. A proposta é mostrar o raciocínio do agente de forma visível, com checkpoints de aprovação humana e telas específicas (formulário aqui, tabela ali) em vez de devolver tudo como resposta corrida de chat. A previsão citada é que até o fim de 2026 cerca de 40% dos aplicativos corporativos vão ter agentes de IA pra tarefas específicas, contra menos de 5% em 2025.

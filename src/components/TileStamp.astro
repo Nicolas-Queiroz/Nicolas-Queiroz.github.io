@@ -1,6 +1,6 @@
 ---
 import Tile from './Tile.astro';
-import { makeTiles } from '../lib/tiles';
+import { makeCircuit } from '../lib/circuit';
 
 interface Props {
   seed: string;
@@ -8,9 +8,9 @@ interface Props {
 }
 
 const { seed, class: className = '' } = Astro.props;
-const tiles = makeTiles(seed, 4);
+const pieces = makeCircuit(seed, 2, 2, { routes: 1 });
 ---
 
 <span class={`tile-stamp ${className}`} aria-hidden="true">
-  {tiles.map((tile, i) => <Tile tile={tile} index={i} />)}
+  {pieces.map((piece, i) => <Tile piece={piece} index={i} />)}
 </span>

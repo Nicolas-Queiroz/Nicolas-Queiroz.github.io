@@ -1,0 +1,39 @@
+---
+// Desenho de uma peça no quadro 100x100, na orientação base.
+// As cores vêm de classes (.piece-ground, .trace, .trace-fill) em global.css,
+// que mudam quando um ancestral recebe .is-live.
+import { N, E, S, W, type Piece } from '../lib/circuit';
+
+interface Props {
+  piece: Piece;
+}
+
+const { piece } = Astro.props;
+
+const ends = [
+  { bit: N, x: 50, y: 0 },
+  { bit: E, x: 100, y: 50 },
+  { bit: S, x: 50, y: 100 },
+  { bit: W, x: 0, y: 50 },
+].filter((end) => piece.mask & end.bit);
+---
+
+<rect class="piece-ground" width="100" height="100" />
+{ends.map((end) => (
+  <line class="trace" x1="50" y1="50" x2={end.x} y2={end.y} stroke-width="12" />
+))}
+{piece.node === 'none' && <circle class="trace-fill" cx="50" cy="50" r="6" />}
+{piece.node === 'via' && <circle class="trace-fill" cx="50" cy="50" r="11" />}
+{piece.node === 'neuron' && <circle class="piece-ground trace" cx="50" cy="50" r="17" stroke-width="8" />}
+{piece.node === 'chip' && (
+  <>
+    <rect class="node-chip" x="31" y="31" width="38" height="38" rx="5" />
+    <rect class="piece-ground" x="43" y="43" width="14" height="14" rx="2" />
+  </>
+)}
+{piece.node === 'source' && (
+  <>
+    <rect class="node-source" x="24" y="24" width="52" height="52" rx="9" />
+    <rect class="node-source-core" x="39" y="39" width="22" height="22" rx="4" />
+  </>
+)}
