@@ -1,0 +1,149 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <style>
+    .bb-bg { fill: var(--color-tile-yellow, #ffc83d); }
+    .bb-halo { fill: var(--color-tile-paper, #eef1fa); opacity: 0.45; }
+    .bb-shadow { fill: var(--color-art-ink, #0d1530); opacity: 0.2; }
+    .bb-ink { fill: var(--color-art-ink, #0d1530); }
+    .bb-line { fill: none; stroke: var(--color-art-ink, #0d1530); stroke-width: 6; stroke-linecap: round; stroke-linejoin: round; }
+    .bb-thick { fill: none; stroke: var(--color-art-ink, #0d1530); stroke-width: 12; stroke-linecap: round; stroke-linejoin: round; }
+    .bb-stroke { stroke: var(--color-art-ink, #0d1530); stroke-width: 6; stroke-linejoin: round; stroke-linecap: round; }
+    .bb-blue { fill: var(--color-tile-blue, #3f6df6); }
+    .bb-green { fill: var(--color-tile-green, #2cb67d); }
+    .bb-red { fill: var(--color-tile-red, #ef476f); }
+    .bb-paper { fill: var(--color-tile-paper, #eef1fa); }
+    .bb-yellow { fill: var(--color-tile-yellow, #ffc83d); }
+    .bb-glyph { font-family: "JetBrains Mono", ui-monospace, monospace; font-weight: 700; text-anchor: middle; }
+    .bb-glyph-light { fill: var(--color-tile-paper, #eef1fa); }
+    .bb-glyph-dark { fill: var(--color-art-ink, #0d1530); }
+
+    .bb-beam {
+      transform-box: view-box;
+      transform-origin: 600px 410px;
+      transform: rotate(8deg);
+      animation: bb-tilt 6s ease-in-out infinite;
+    }
+    .bb-pan-left { transform: translateY(-40.4px); animation: bb-pan-left 6s ease-in-out infinite; }
+    .bb-pan-right { transform: translateY(40.4px); animation: bb-pan-right 6s ease-in-out infinite; }
+    .bb-agent { animation: bb-hover 4s ease-in-out infinite; }
+    .bb-bulb { animation: bb-blink 1.6s ease-in-out infinite; }
+
+    @keyframes bb-tilt {
+      0%, 100% { transform: rotate(6deg); }
+      50% { transform: rotate(10deg); }
+    }
+    @keyframes bb-pan-left {
+      0%, 100% { transform: translateY(-30.3px); }
+      50% { transform: translateY(-50.4px); }
+    }
+    @keyframes bb-pan-right {
+      0%, 100% { transform: translateY(30.3px); }
+      50% { transform: translateY(50.4px); }
+    }
+    @keyframes bb-hover {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(16px); }
+    }
+    @keyframes bb-blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.25; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .bb-anim { animation: none !important; }
+    }
+  </style>
+
+  <rect class="bb-bg" width="1200" height="630" />
+  <circle class="bb-halo" cx="600" cy="330" r="250" />
+
+  <!-- brilhos -->
+  <path class="bb-paper bb-stroke" transform="translate(700 118)" d="M0 -22 Q4 -4 22 0 Q4 4 0 22 Q-4 4 -22 0 Q-4 -4 0 -22 Z" />
+  <path class="bb-paper bb-stroke" transform="translate(1110 330) scale(0.7)" d="M0 -22 Q4 -4 22 0 Q4 4 0 22 Q-4 4 -22 0 Q-4 -4 0 -22 Z" />
+
+  <!-- carrinho vazio deixado de lado -->
+  <g transform="translate(120 470) rotate(-8)">
+    <path class="bb-shadow" transform="translate(10 10)" d="M58 30 H210 L186 92 H80 Z" />
+    <path class="bb-paper bb-stroke" d="M58 30 H210 L186 92 H80 Z" />
+    <path class="bb-line" d="M0 8 H34 L80 92 L70 112 H196" />
+    <path class="bb-line" d="M100 30 L108 92 M140 30 L140 92 M180 30 L168 92" />
+    <circle class="bb-ink" cx="92" cy="130" r="13" />
+    <circle class="bb-ink" cx="180" cy="130" r="13" />
+  </g>
+
+  <!-- Base e haste -->
+  <ellipse class="bb-shadow" cx="610" cy="604" rx="190" ry="14" />
+  <path class="bb-shadow" d="M607 420 H633 V575 H607 Z M520 565 H700 L740 610 H480 Z" />
+  <rect class="bb-ink" x="587" y="410" width="26" height="160" rx="6" />
+  <path class="bb-ink" d="M510 555 H690 L730 598 Q732 602 726 602 H474 Q468 602 470 598 Z" />
+
+  <!-- Prato esquerdo: comprar -->
+  <g class="bb-pan-left bb-anim">
+    <!-- etiqueta de preço -->
+    <g transform="translate(196 206) rotate(-10)">
+      <path class="bb-shadow" transform="translate(10 10)" d="M60 0 H220 Q232 0 232 12 V128 Q232 140 220 140 H60 L0 70 Z" />
+      <path class="bb-red bb-stroke" d="M60 0 H220 Q232 0 232 12 V128 Q232 140 220 140 H60 L0 70 Z" />
+      <circle class="bb-paper bb-stroke" cx="50" cy="70" r="13" />
+      <text class="bb-glyph bb-glyph-light" x="148" y="100" font-size="92">$</text>
+    </g>
+    <!-- cordão da etiqueta -->
+    <path class="bb-line" d="M245 272 C 205 250, 170 200, 205 160 C 230 132, 270 150, 262 182" />
+    <!-- prato -->
+    <rect class="bb-shadow" x="310" y="385" width="20" height="35" />
+    <rect class="bb-ink" x="300" y="372" width="20" height="40" />
+    <path class="bb-shadow" transform="translate(10 10)" d="M160 350 H460 L430 378 H190 Z" />
+    <path class="bb-paper bb-stroke" d="M160 350 H460 L430 378 H190 Z" />
+  </g>
+
+  <!-- Prato direito: construir -->
+  <g class="bb-pan-right bb-anim">
+    <rect class="bb-ink" x="880" y="372" width="20" height="40" />
+    <path class="bb-shadow" transform="translate(10 10)" d="M740 350 H1040 L1010 378 H770 Z" />
+    <path class="bb-paper bb-stroke" d="M740 350 H1040 L1010 378 H770 Z" />
+
+    <!-- pilha de módulos -->
+    <path class="bb-shadow" d="M758 272 H1034 V360 H758 Z M816 182 H976 V272 H816 Z" />
+    <rect class="bb-blue bb-stroke" x="748" y="262" width="134" height="88" rx="8" />
+    <rect class="bb-green bb-stroke" x="890" y="262" width="134" height="88" rx="8" />
+    <rect class="bb-red bb-stroke" x="806" y="172" width="160" height="88" rx="8" />
+    <!-- encaixes -->
+    <rect class="bb-blue bb-stroke" x="778" y="248" width="30" height="14" rx="3" />
+    <rect class="bb-green bb-stroke" x="978" y="248" width="30" height="14" rx="3" />
+    <rect class="bb-red bb-stroke" x="836" y="158" width="30" height="14" rx="3" />
+    <rect class="bb-red bb-stroke" x="906" y="158" width="30" height="14" rx="3" />
+    <text class="bb-glyph bb-glyph-light" x="815" y="322" font-size="44">{ }</text>
+    <text class="bb-glyph bb-glyph-light" x="957" y="322" font-size="44">&lt;/&gt;</text>
+    <text class="bb-glyph bb-glyph-light" x="886" y="232" font-size="44">=&gt;</text>
+  </g>
+
+  <!-- Braço da balança -->
+  <g class="bb-beam bb-anim">
+    <rect class="bb-shadow" x="310" y="408" width="600" height="24" rx="12" />
+    <rect class="bb-ink" x="300" y="398" width="600" height="24" rx="12" />
+  </g>
+  <circle class="bb-ink" cx="600" cy="410" r="24" />
+  <circle class="bb-yellow" cx="600" cy="410" r="9" />
+
+  <!-- Agente colocando o bloco do topo -->
+  <g class="bb-agent bb-anim">
+    <!-- bloco segurado -->
+    <rect class="bb-shadow" x="836" y="80" width="120" height="78" rx="8" />
+    <rect class="bb-paper bb-stroke" x="826" y="70" width="120" height="78" rx="8" />
+    <text class="bb-glyph bb-glyph-dark" x="886" y="124" font-size="40">( )</text>
+    <!-- corpo -->
+    <rect class="bb-shadow" x="1072" y="170" width="64" height="44" rx="10" />
+    <rect class="bb-paper bb-stroke" x="1062" y="160" width="64" height="44" rx="10" />
+    <path class="bb-line" d="M1076 228 H1112 M1084 244 H1104" />
+    <!-- braço articulado e garra -->
+    <path class="bb-thick" d="M1064 184 L1006 198 L968 150" />
+    <circle class="bb-ink" cx="1006" cy="198" r="10" />
+    <rect class="bb-shadow" x="944" y="126" width="34" height="44" rx="7" />
+    <rect class="bb-yellow bb-stroke" x="934" y="116" width="34" height="44" rx="7" />
+    <!-- cabeça -->
+    <rect class="bb-shadow" x="1050" y="88" width="112" height="86" rx="18" />
+    <line class="bb-line" x1="1094" y1="78" x2="1094" y2="48" />
+    <circle class="bb-red bb-stroke bb-bulb bb-anim" cx="1094" cy="40" r="11" />
+    <rect class="bb-blue bb-stroke" x="1038" y="78" width="112" height="86" rx="18" />
+    <rect class="bb-ink" x="1054" y="96" width="80" height="50" rx="12" />
+    <rect class="bb-yellow" x="1068" y="110" width="16" height="22" rx="8" />
+    <rect class="bb-yellow" x="1104" y="110" width="16" height="22" rx="8" />
+  </g>
+</svg>

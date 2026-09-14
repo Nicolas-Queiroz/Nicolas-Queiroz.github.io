@@ -1,10 +1,4 @@
 ---
-import BaseLayout from '../../layouts/BaseLayout.astro';
-import AboutContent from '../../components/AboutContent.astro';
-import BackButton from '../../components/BackButton.astro';
+// The resume now lives on the home page; keeps the old link working.
+return Astro.redirect('/en/');
 ---
-
-<BaseLayout lang="en" title="About">
-  <BackButton href="/en" label="Home" />
-  <AboutContent lang="en" />
-</BaseLayout>

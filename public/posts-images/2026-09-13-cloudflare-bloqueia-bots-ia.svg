@@ -1,0 +1,215 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <style>
+    .cf-bg { fill: var(--color-tile-red, #ef476f); }
+    .cf-shadow { fill: var(--color-art-ink, #0d1530); opacity: 0.2; }
+    .cf-road { fill: var(--color-art-ink, #0d1530); opacity: 0.16; }
+    .cf-lane-dash { stroke: var(--color-tile-paper, #eef1fa); stroke-width: 6; stroke-dasharray: 26 22; stroke-linecap: round; opacity: 0.45; fill: none; }
+    .cf-paper { fill: var(--color-tile-paper, #eef1fa); }
+    .cf-ink { fill: var(--color-art-ink, #0d1530); }
+    .cf-blue { fill: var(--color-tile-blue, #3f6df6); }
+    .cf-yellow { fill: var(--color-tile-yellow, #ffc83d); }
+    .cf-green { fill: var(--color-tile-green, #2cb67d); }
+    .cf-red { fill: var(--color-tile-red, #ef476f); }
+    .cf-line { stroke: var(--color-art-ink, #0d1530); stroke-width: 6; stroke-linejoin: round; stroke-linecap: round; }
+    .cf-none { fill: none; }
+    .cf-text { fill: var(--color-art-ink, #0d1530); opacity: 0.32; }
+    .cf-glass { fill: var(--color-tile-blue, #3f6df6); opacity: 0.28; }
+    .cf-handle { stroke: var(--color-art-ink, #0d1530); stroke-width: 26; stroke-linecap: round; }
+    .cf-handle-core { stroke: var(--color-tile-yellow, #ffc83d); stroke-width: 12; stroke-linecap: round; }
+    .cf-dim { opacity: 0.3; }
+    .cf-x { stroke: var(--color-tile-paper, #eef1fa); stroke-width: 5; stroke-linecap: round; stroke-linejoin: round; }
+    .cf-addr { fill: var(--color-tile-paper, #eef1fa); opacity: 0.22; }
+
+    .cf-bounce { animation: cf-bounce 3.2s ease-in-out infinite; }
+    .cf-arm-hit { transform-box: fill-box; transform-origin: right center; animation: cf-arm-hit 3.2s ease-in-out infinite; }
+    .cf-walk { animation: cf-walk 6.5s linear infinite; }
+    .cf-burst { transform-box: fill-box; transform-origin: center; animation: cf-burst 3.2s ease-out infinite; }
+    .cf-blink { animation: cf-blink 3s ease-in-out infinite; }
+    .cf-glow { transform-box: fill-box; transform-origin: center; animation: cf-glow 3s ease-out infinite; }
+
+    @keyframes cf-bounce {
+      0% { transform: translateX(-46px); }
+      42% { transform: translateX(0); }
+      52% { transform: translateX(-26px); }
+      62% { transform: translateX(-4px); }
+      72% { transform: translateX(-14px); }
+      100% { transform: translateX(-46px); }
+    }
+    @keyframes cf-arm-hit {
+      0%, 40%, 70%, 100% { transform: rotate(0deg); }
+      46% { transform: rotate(3deg); }
+      56% { transform: rotate(-1.5deg); }
+    }
+    @keyframes cf-walk {
+      0% { transform: translateX(-170px); opacity: 0; }
+      8% { opacity: 1; }
+      84% { transform: translateX(330px); opacity: 1; }
+      94% { transform: translateX(370px); opacity: 0; }
+      100% { transform: translateX(370px); opacity: 0; }
+    }
+    @keyframes cf-burst {
+      0%, 38% { transform: scale(0.2) rotate(0deg); opacity: 0; }
+      44% { transform: scale(1.1) rotate(12deg); opacity: 1; }
+      58% { transform: scale(0.9) rotate(20deg); opacity: 0; }
+      100% { transform: scale(0.2); opacity: 0; }
+    }
+    @keyframes cf-blink {
+      0%, 45%, 100% { opacity: 1; }
+      60%, 80% { opacity: 0.8; }
+    }
+    @keyframes cf-glow {
+      0% { transform: scale(1); opacity: 0.55; }
+      70%, 100% { transform: scale(1.9); opacity: 0; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .cf-anim { animation: none !important; }
+    }
+  </style>
+
+  <rect class="cf-bg" width="1200" height="630" />
+
+  <!-- Nuvens de fundo -->
+  <path class="cf-paper cf-dim" d="M70 150 H250 A34 34 0 0 0 236 88 A52 52 0 0 0 140 76 A40 40 0 0 0 70 150 Z" />
+  <path class="cf-paper cf-dim" d="M300 70 H400 A22 22 0 0 0 390 30 A32 32 0 0 0 330 26 A26 26 0 0 0 300 70 Z" />
+
+  <!-- Pistas -->
+  <rect class="cf-road" x="0" y="372" width="880" height="26" />
+  <line class="cf-lane-dash" x1="20" y1="420" x2="860" y2="420" />
+  <rect class="cf-road" x="0" y="568" width="880" height="26" />
+
+  <!-- Poste da portaria (atrás da nuvem) -->
+  <rect class="cf-shadow" x="602" y="195" width="16" height="385" />
+  <rect class="cf-ink" x="592" y="185" width="16" height="385" />
+  <rect class="cf-ink" x="566" y="562" width="68" height="18" rx="5" />
+
+  <!-- Nuvem-portaria com escudo -->
+  <g transform="translate(0 12)">
+  <path class="cf-shadow" transform="translate(10 10)" d="M430 195 H770 A56 56 0 0 0 782 84 A120 120 0 0 0 610 44 A95 95 0 0 0 468 86 A60 60 0 0 0 430 195 Z" />
+  <path class="cf-paper cf-line" d="M430 195 H770 A56 56 0 0 0 782 84 A120 120 0 0 0 610 44 A95 95 0 0 0 468 86 A60 60 0 0 0 430 195 Z" />
+  <path class="cf-blue cf-line" d="M600 70 L648 88 V122 C648 150 628 168 600 180 C572 168 552 150 552 122 V88 Z" />
+  <circle class="cf-paper" cx="600" cy="113" r="12" />
+  <path class="cf-paper" d="M593 118 H607 L611 150 H589 Z" />
+  </g>
+
+  <!-- Pista de cima: cancela aberta e luz verde -->
+  <g transform="rotate(75 600 330)">
+    <rect class="cf-yellow" x="470" y="318" width="130" height="24" />
+    <rect class="cf-ink" x="492" y="318" width="22" height="24" />
+    <rect class="cf-ink" x="536" y="318" width="22" height="24" />
+    <rect class="cf-ink" x="580" y="318" width="20" height="24" />
+    <rect class="cf-none cf-line" x="470" y="318" width="130" height="24" rx="4" />
+  </g>
+  <circle class="cf-ink" cx="600" cy="330" r="13" />
+  <rect class="cf-ink" x="606" y="324" width="14" height="12" />
+  <rect class="cf-shadow" x="628" y="304" width="48" height="48" rx="10" />
+  <rect class="cf-ink" x="618" y="294" width="48" height="48" rx="10" />
+  <circle class="cf-green cf-glow cf-anim" cx="642" cy="318" r="16" />
+  <circle class="cf-green" cx="642" cy="318" r="16" />
+  <path class="cf-none cf-x" d="M634 318 L640 324 L651 312" />
+
+  <!-- Pista de baixo: cancela abaixada e luz vermelha -->
+  <g class="cf-arm-hit cf-anim">
+    <rect class="cf-shadow" x="430" y="508" width="180" height="26" rx="4" />
+    <rect class="cf-yellow" x="420" y="497" width="180" height="26" />
+    <rect class="cf-ink" x="444" y="497" width="24" height="26" />
+    <rect class="cf-ink" x="492" y="497" width="24" height="26" />
+    <rect class="cf-ink" x="540" y="497" width="24" height="26" />
+    <rect class="cf-none cf-line" x="420" y="497" width="180" height="26" rx="4" />
+    <circle class="cf-paper cf-line" cx="420" cy="510" r="16" />
+  </g>
+  <circle class="cf-ink" cx="600" cy="510" r="13" />
+  <rect class="cf-ink" x="606" y="504" width="14" height="12" />
+  <rect class="cf-shadow" x="628" y="484" width="48" height="48" rx="10" />
+  <rect class="cf-ink" x="618" y="474" width="48" height="48" rx="10" />
+  <circle class="cf-red cf-glow cf-anim" cx="642" cy="498" r="16" />
+  <circle class="cf-red cf-blink cf-anim" cx="642" cy="498" r="16" />
+  <path class="cf-none cf-x" d="M635 491 L649 505 M649 491 L635 505" />
+
+  <!-- Site: janela de navegador com anúncios -->
+  <rect class="cf-shadow" x="870" y="140" width="300" height="430" rx="18" />
+  <rect class="cf-paper cf-line" x="860" y="130" width="300" height="430" rx="18" />
+  <path class="cf-ink" d="M878 130 H1142 A18 18 0 0 1 1160 148 V182 H860 V148 A18 18 0 0 1 878 130 Z" />
+  <circle class="cf-red" cx="890" cy="156" r="8" />
+  <circle class="cf-yellow" cx="916" cy="156" r="8" />
+  <circle class="cf-green" cx="942" cy="156" r="8" />
+  <rect class="cf-addr" x="966" y="146" width="172" height="20" rx="10" />
+  <rect class="cf-ink" x="886" y="206" width="170" height="22" rx="11" />
+  <rect class="cf-text" x="886" y="244" width="248" height="12" rx="6" />
+  <rect class="cf-text" x="886" y="266" width="214" height="12" rx="6" />
+  <rect class="cf-text" x="886" y="288" width="236" height="12" rx="6" />
+  <rect class="cf-yellow cf-line" x="886" y="318" width="248" height="92" rx="12" />
+  <circle class="cf-ink" cx="1010" cy="364" r="24" />
+  <path class="cf-yellow" d="M1002 350 L1024 364 L1002 378 Z" />
+  <rect class="cf-text" x="886" y="430" width="248" height="12" rx="6" />
+  <rect class="cf-text" x="886" y="452" width="200" height="12" rx="6" />
+  <rect class="cf-yellow cf-line" x="886" y="482" width="104" height="52" rx="10" />
+  <rect class="cf-text" x="1006" y="490" width="128" height="12" rx="6" />
+  <rect class="cf-text" x="1006" y="512" width="96" height="12" rx="6" />
+
+  <!-- Bot de busca: lupa simpática passando livre -->
+  <g transform="translate(300 315)">
+    <g class="cf-walk cf-anim">
+      <circle class="cf-shadow" cx="10" cy="10" r="43" />
+      <line class="cf-handle" x1="-30" y1="-30" x2="-70" y2="-70" />
+      <line class="cf-handle-core" x1="-34" y1="-34" x2="-68" y2="-68" />
+      <path class="cf-none cf-line" d="M-14 38 L-22 57 M14 38 L22 57" />
+      <path class="cf-none cf-line" d="M-30 57 H-14 M14 57 H30" />
+      <circle class="cf-paper cf-line" cx="0" cy="0" r="42" />
+      <circle class="cf-glass" cx="0" cy="0" r="30" />
+      <circle class="cf-ink" cx="-12" cy="-4" r="6" />
+      <circle class="cf-ink" cx="12" cy="-4" r="6" />
+      <path class="cf-none cf-line" d="M-11 12 Q0 21 11 12" style="stroke-width: 5;" />
+    </g>
+  </g>
+
+  <!-- Crawlers de treinamento barrados -->
+  <g transform="translate(-66 568) scale(0.84)">
+    <rect class="cf-shadow" x="10" y="-90" width="112" height="64" rx="22" />
+    <path class="cf-shadow" d="M118 -66 L160 -88 L160 -24 L118 -48 Z" />
+    <path class="cf-none cf-line" d="M18 -40 L0 -22 L-8 0 M40 -40 L34 -20 L30 0 M70 -40 L76 -20 L80 0 M92 -40 L110 -22 L118 0" />
+    <line class="cf-line" x1="30" y1="-100" x2="22" y2="-126" />
+    <circle class="cf-yellow cf-line" cx="20" cy="-132" r="9" />
+    <rect class="cf-ink cf-line" x="0" y="-100" width="112" height="64" rx="22" />
+    <circle class="cf-yellow" cx="70" cy="-72" r="10" />
+    <circle class="cf-yellow" cx="94" cy="-72" r="10" />
+    <path class="cf-paper cf-line" d="M108 -76 L150 -98 L150 -34 L108 -58 Z" />
+    <ellipse class="cf-ink" cx="150" cy="-66" rx="9" ry="30" />
+  </g>
+
+  <g transform="translate(64 568) scale(0.92)">
+    <rect class="cf-shadow" x="10" y="-90" width="112" height="64" rx="22" />
+    <path class="cf-shadow" d="M118 -66 L160 -88 L160 -24 L118 -48 Z" />
+    <path class="cf-none cf-line" d="M18 -40 L0 -22 L-8 0 M40 -40 L34 -20 L30 0 M70 -40 L76 -20 L80 0 M92 -40 L110 -22 L118 0" />
+    <line class="cf-line" x1="30" y1="-100" x2="22" y2="-126" />
+    <circle class="cf-yellow cf-line" cx="20" cy="-132" r="9" />
+    <rect class="cf-ink cf-line" x="0" y="-100" width="112" height="64" rx="22" />
+    <circle class="cf-yellow" cx="70" cy="-72" r="10" />
+    <circle class="cf-yellow" cx="94" cy="-72" r="10" />
+    <circle class="cf-ink" cx="74" cy="-72" r="4" />
+    <circle class="cf-ink" cx="98" cy="-72" r="4" />
+    <path class="cf-paper cf-line" d="M108 -76 L150 -98 L150 -34 L108 -58 Z" />
+    <ellipse class="cf-ink" cx="150" cy="-66" rx="9" ry="30" />
+  </g>
+
+  <g transform="translate(254 568)">
+    <g class="cf-bounce cf-anim">
+      <rect class="cf-shadow" x="10" y="-90" width="112" height="64" rx="22" />
+    <path class="cf-shadow" d="M118 -66 L160 -88 L160 -24 L118 -48 Z" />
+      <path class="cf-none cf-line" d="M18 -40 L0 -22 L-8 0 M40 -40 L34 -20 L30 0 M70 -40 L76 -20 L80 0 M92 -40 L110 -22 L118 0" />
+      <line class="cf-line" x1="30" y1="-100" x2="22" y2="-126" />
+      <circle class="cf-yellow cf-line" cx="20" cy="-132" r="9" />
+      <rect class="cf-ink cf-line" x="0" y="-100" width="112" height="64" rx="22" />
+      <circle class="cf-yellow" cx="70" cy="-72" r="10" />
+      <circle class="cf-yellow" cx="94" cy="-72" r="10" />
+      <circle class="cf-ink" cx="74" cy="-72" r="4" />
+      <circle class="cf-ink" cx="98" cy="-72" r="4" />
+      <path class="cf-paper cf-line" d="M108 -76 L150 -98 L150 -34 L108 -58 Z" />
+      <ellipse class="cf-ink" cx="150" cy="-66" rx="9" ry="30" />
+    </g>
+  </g>
+
+  <!-- Impacto na cancela -->
+  <g transform="translate(414 456)">
+    <path class="cf-paper cf-line cf-burst cf-anim" d="M0 -30 L8 -10 L28 -16 L14 2 L30 16 L8 14 L2 34 L-6 14 L-26 20 L-14 2 L-30 -12 L-8 -10 Z" />
+  </g>
+</svg>

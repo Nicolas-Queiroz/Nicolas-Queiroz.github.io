@@ -1,6 +1,7 @@
 ---
 import ThemeToggle from './ThemeToggle.astro';
 import TileStamp from './TileStamp.astro';
+import CommandPalette from './CommandPalette.astro';
 import { profile } from '../data/profile';
 
 interface Props {
@@ -11,15 +12,15 @@ const { lang } = Astro.props;
 
 const labels = {
   pt: {
-    home: 'Início',
+    home: 'Currículo',
     blog: 'Blog',
-    about: 'Sobre',
+    contact: 'Contato',
     otherLang: 'EN',
   },
   en: {
-    home: 'Home',
+    home: 'Resume',
     blog: 'Blog',
-    about: 'About',
+    contact: 'Contact',
     otherLang: 'PT',
   },
 };
@@ -27,7 +28,6 @@ const labels = {
 const t = labels[lang];
 const basePath = `/${lang}`;
 const blogPath = `/${lang}/blog`;
-const aboutPath = lang === 'pt' ? '/pt/sobre' : '/en/about';
 
 const path = new URL(Astro.request.url).pathname.replace(/\/$/, '') || '/';
 // Home só fica ativo em match exato — senão "/pt" (prefixo de tudo) ficaria
@@ -42,7 +42,6 @@ const isActive = (href: string, exact = false) => {
 function otherLangHref(): string {
   const other = lang === 'pt' ? 'en' : 'pt';
   if (path === basePath) return `/${other}`;
-  if (path.startsWith(aboutPath)) return other === 'pt' ? '/pt/sobre' : '/en/about';
   if (path.startsWith(blogPath)) return `/${other}/blog`;
   return `/${other}`;
 }
@@ -58,14 +57,14 @@ const otherLangPath = otherLangHref();
         {profile.name.split(' ')[0]} {profile.name.split(' ').slice(-1)}
       </span>
     </a>
-    <div class="flex items-center gap-1 sm:gap-3">
+    <div class="flex items-center gap-1.5 sm:gap-2.5">
       <ul class="flex items-center text-sm font-medium">
         {[
           { href: basePath, label: t.home, active: isActive(basePath, true) },
           { href: blogPath, label: t.blog, active: isActive(blogPath) },
-          { href: aboutPath, label: t.about, active: isActive(aboutPath) },
+          { href: `${basePath}/#contato`, label: t.contact, active: false, hideOnMobile: true },
         ].map((item) => (
-          <li>
+          <li class={item.hideOnMobile ? 'hidden sm:block' : undefined}>
             <a
               href={item.href}
               aria-current={item.active ? 'page' : undefined}
@@ -76,6 +75,7 @@ const otherLangPath = otherLangHref();
           </li>
         ))}
       </ul>
+      <CommandPalette lang={lang} otherLangHref={otherLangPath} />
       <a
         href={otherLangPath}
         class="rounded-md border border-[var(--color-border)] px-2 py-1 text-xs font-semibold text-[var(--color-ink-soft)] transition hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]"

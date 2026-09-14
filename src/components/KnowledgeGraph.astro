@@ -1,0 +1,81 @@
+---
+// Grafo do agente MCP: como o projeto se organiza (skill de review e base em grafo no Obsidian).
+// Passar o mouse ou focar um nó destaca as ligações dele.
+interface Props {
+  lang: 'pt' | 'en';
+}
+
+const { lang } = Astro.props;
+
+const labels = {
+  pt: { agent: 'Agente MCP', skill: 'Skill de review', articles: 'Artigos', obsidian: 'Obsidian', module: 'Módulo', submodule: 'Submódulo', feature: 'Característica', title: 'Grafo do agente MCP' },
+  en: { agent: 'MCP agent', skill: 'Review skill', articles: 'Articles', obsidian: 'Obsidian', module: 'Module', submodule: 'Submodule', feature: 'Feature', title: 'MCP agent graph' },
+}[lang];
+
+const nodes = [
+  { id: 'agent', x: 200, y: 130, r: 26, kind: 'agent' },
+  { id: 'skill', x: 70, y: 60, r: 15, kind: 'skill' },
+  { id: 'articles', x: 60, y: 200, r: 12, kind: 'skill' },
+  { id: 'obsidian', x: 320, y: 70, r: 15, kind: 'graph' },
+  { id: 'module', x: 330, y: 190, r: 13, kind: 'graph' },
+  { id: 'submodule', x: 250, y: 235, r: 10, kind: 'graph' },
+  { id: 'feature', x: 395, y: 245, r: 10, kind: 'graph' },
+] as const;
+
+const edges: [string, string][] = [
+  ['agent', 'skill'],
+  ['skill', 'articles'],
+  ['agent', 'obsidian'],
+  ['obsidian', 'module'],
+  ['agent', 'module'],
+  ['module', 'submodule'],
+  ['module', 'feature'],
+];
+
+const byId = Object.fromEntries(nodes.map((n) => [n.id, n]));
+---
+
+<svg class="knowledge-graph" viewBox="0 0 440 280" role="img" aria-label={labels.title} data-graph>
+  {edges.map(([a, b], i) => (
+    <line
+      class="kg-edge"
+      data-edge={`${a} ${b}`}
+      x1={byId[a].x}
+      y1={byId[a].y}
+      x2={byId[b].x}
+      y2={byId[b].y}
+      style={`--i: ${i}`}
+    />
+  ))}
+  {nodes.map((n, i) => (
+    <g class={`kg-node kg-${n.kind}`} data-node={n.id} tabindex="0" style={`--i: ${i}`}>
+      <circle cx={n.x} cy={n.y} r={n.r} />
+      <text x={n.x} y={n.y + n.r + 16} text-anchor="middle">{labels[n.id]}</text>
+    </g>
+  ))}
+</svg>
+
+<script data-astro-rerun is:inline>
+  function initGraphs() {
+    document.querySelectorAll('[data-graph]').forEach(function (svg) {
+      function highlight(id) {
+        svg.classList.toggle('is-focused', !!id);
+        svg.querySelectorAll('[data-edge]').forEach(function (edge) {
+          edge.classList.toggle('is-active', !!id && edge.dataset.edge.split(' ').indexOf(id) !== -1);
+        });
+        svg.querySelectorAll('[data-node]').forEach(function (node) {
+          var linked = node.dataset.node === id || Array.prototype.some.call(svg.querySelectorAll('[data-edge].is-active'), function (e) {
+            return e.dataset.edge.split(' ').indexOf(node.dataset.node) !== -1;
+          });
+          node.classList.toggle('is-active', !!id && linked);
+        });
+      }
+      svg.querySelectorAll('[data-node]').forEach(function (node) {
+        node.onmouseenter = node.onfocus = function () { highlight(node.dataset.node); };
+        node.onmouseleave = node.onblur = function () { highlight(null); };
+      });
+    });
+  }
+
+  initGraphs();
+</script>

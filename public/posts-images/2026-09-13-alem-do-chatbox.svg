@@ -1,0 +1,173 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <style>
+    .cb-bg { fill: var(--color-tile-green, #2cb67d); }
+    .cb-paper { fill: var(--color-tile-paper, #eef1fa); }
+    .cb-ink { fill: var(--color-art-ink, #0d1530); }
+    .cb-shadow { fill: var(--color-art-ink, #0d1530); opacity: 0.2; }
+    .cb-line { fill: none; stroke: var(--color-art-ink, #0d1530); stroke-width: 6; stroke-linejoin: round; stroke-linecap: round; }
+    .cb-outline { stroke: var(--color-art-ink, #0d1530); stroke-width: 6; stroke-linejoin: round; stroke-linecap: round; }
+    .cb-muted { fill: var(--color-art-ink, #0d1530); opacity: 0.22; }
+    .cb-blue { fill: var(--color-tile-blue, #3f6df6); }
+    .cb-yellow { fill: var(--color-tile-yellow, #ffc83d); }
+    .cb-red { fill: var(--color-tile-red, #ef476f); }
+    .cb-green { fill: var(--color-tile-green, #2cb67d); }
+    .cb-check { fill: none; stroke: var(--color-tile-paper, #eef1fa); stroke-width: 7; stroke-linejoin: round; stroke-linecap: round; }
+    .cb-check-ink { fill: none; stroke: var(--color-art-ink, #0d1530); stroke-width: 9; stroke-linejoin: round; stroke-linecap: round; }
+    .cb-spark { fill: var(--color-tile-paper, #eef1fa); opacity: 0.55; }
+    .cb-ripple { fill: none; stroke: var(--color-art-ink, #0d1530); stroke-width: 5; }
+
+    .cb-float { animation: cb-float 6s ease-in-out infinite alternate; }
+    .cb-wobble { transform-box: fill-box; transform-origin: center; animation: cb-wobble 4.5s ease-in-out infinite alternate; }
+    .cb-cursor { animation: cb-cursor 5s ease-in-out infinite; }
+    .cb-press { animation: cb-press 5s ease-in-out infinite; }
+    .cb-ripple { transform-box: fill-box; transform-origin: center; animation: cb-ripple 5s ease-out infinite; opacity: 0; }
+    .cb-dot { animation: cb-fall 3.6s ease-in infinite; }
+    .cb-dot-2 { animation-delay: 0.5s; }
+    .cb-dot-3 { animation-delay: 1s; }
+    .cb-pop { transform-box: fill-box; transform-origin: center bottom; animation: cb-pop 2.4s ease-in-out infinite alternate; }
+    .cb-think { transform-box: fill-box; transform-origin: center; animation: cb-think 1.6s ease-in-out infinite alternate; }
+
+    @keyframes cb-float {
+      from { transform: translateY(0); }
+      to { transform: translateY(-12px); }
+    }
+    @keyframes cb-wobble {
+      from { transform: rotate(-3deg); }
+      to { transform: rotate(3deg); }
+    }
+    @keyframes cb-cursor {
+      0% { transform: translate(170px, 150px); }
+      36% { transform: translate(0, 0); }
+      40% { transform: translate(3px, 3px); }
+      46% { transform: translate(0, 0); }
+      72% { transform: translate(0, 0); }
+      100% { transform: translate(170px, 150px); }
+    }
+    @keyframes cb-press {
+      0%, 37% { transform: translate(0, 0); }
+      40% { transform: translate(5px, 5px); }
+      46%, 100% { transform: translate(0, 0); }
+    }
+    @keyframes cb-ripple {
+      0%, 38% { opacity: 0; transform: scale(0.3); }
+      40% { opacity: 0.9; transform: scale(0.3); }
+      70%, 100% { opacity: 0; transform: scale(2.6); }
+    }
+    @keyframes cb-fall {
+      0% { transform: translate(0, 0); opacity: 1; }
+      80% { opacity: 0.9; }
+      100% { transform: translate(-14px, 70px); opacity: 0; }
+    }
+    @keyframes cb-pop {
+      from { transform: scale(0.8); opacity: 0.55; }
+      to { transform: scale(1.1); opacity: 1; }
+    }
+    @keyframes cb-think {
+      from { opacity: 0.35; }
+      to { opacity: 1; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .cb-anim { animation: none !important; }
+      .cb-ripple { opacity: 0; }
+    }
+  </style>
+
+  <rect class="cb-bg" width="1200" height="630" />
+
+  <!-- brilhos -->
+  <path class="cb-spark" d="M150 70 l10 28 l28 10 l-28 10 l-10 28 l-10 -28 l-28 -10 l28 -10 z" />
+  <path class="cb-spark" d="M300 150 l6 16 l16 6 l-16 6 l-6 16 l-6 -16 l-16 -6 l16 -6 z" />
+  <path class="cb-spark" d="M1140 560 l7 20 l20 7 l-20 7 l-7 20 l-7 -20 l-20 -7 l20 -7 z" />
+
+  <!-- painel da tarefa emergindo -->
+  <g transform="rotate(-4 780 300)">
+    <g class="cb-float cb-anim">
+      <rect class="cb-shadow" x="440" y="70" width="700" height="470" rx="26" />
+      <rect class="cb-paper cb-outline" x="430" y="60" width="700" height="470" rx="26" />
+      <path class="cb-line" d="M430 124 H1130" />
+      <circle class="cb-red cb-outline" cx="470" cy="92" r="11" />
+      <circle class="cb-yellow cb-outline" cx="506" cy="92" r="11" />
+      <circle class="cb-blue cb-outline" cx="542" cy="92" r="11" />
+
+      <!-- formulário -->
+      <rect class="cb-muted" x="470" y="158" width="100" height="14" rx="7" />
+      <rect class="cb-paper cb-outline" x="470" y="182" width="300" height="54" rx="12" />
+      <rect class="cb-blue" x="492" y="202" width="150" height="16" rx="8" />
+      <rect class="cb-muted" x="470" y="258" width="70" height="14" rx="7" />
+      <rect class="cb-paper cb-outline" x="470" y="282" width="300" height="54" rx="12" />
+      <rect class="cb-red" x="492" y="302" width="96" height="16" rx="8" />
+
+      <!-- tabela -->
+      <rect class="cb-paper cb-outline" x="470" y="366" width="300" height="130" rx="12" />
+      <path class="cb-line" d="M470 409 H770 M470 452 H770 M570 366 V496 M670 366 V496" />
+      <rect class="cb-ink" x="488" y="381" width="62" height="14" rx="7" />
+      <rect class="cb-ink" x="588" y="381" width="62" height="14" rx="7" />
+      <rect class="cb-ink" x="688" y="381" width="62" height="14" rx="7" />
+      <rect class="cb-yellow" x="486" y="420" width="68" height="22" rx="6" />
+      <rect class="cb-muted" x="590" y="424" width="58" height="14" rx="7" />
+      <rect class="cb-green" x="686" y="420" width="68" height="22" rx="6" />
+      <rect class="cb-muted" x="490" y="467" width="58" height="14" rx="7" />
+      <rect class="cb-blue" x="586" y="463" width="68" height="22" rx="6" />
+      <rect class="cb-muted" x="690" y="467" width="50" height="14" rx="7" />
+
+      <!-- trilha de raciocínio -->
+      <path class="cb-line" d="M840 180 V340" />
+      <circle class="cb-green cb-outline" cx="840" cy="180" r="26" />
+      <path class="cb-check" d="M828 181 l8 8 l16 -16" />
+      <rect class="cb-muted" x="886" y="164" width="180" height="14" rx="7" />
+      <rect class="cb-muted" x="886" y="186" width="120" height="14" rx="7" />
+      <circle class="cb-green cb-outline" cx="840" cy="260" r="26" />
+      <path class="cb-check" d="M828 261 l8 8 l16 -16" />
+      <rect class="cb-muted" x="886" y="244" width="200" height="14" rx="7" />
+      <rect class="cb-muted" x="886" y="266" width="90" height="14" rx="7" />
+      <circle class="cb-paper cb-outline" cx="840" cy="340" r="26" />
+      <circle class="cb-ink cb-think cb-anim" cx="828" cy="340" r="4.5" />
+      <circle class="cb-ink cb-think cb-anim" cx="840" cy="340" r="4.5" style="animation-delay: 0.3s" />
+      <circle class="cb-ink cb-think cb-anim" cx="852" cy="340" r="4.5" style="animation-delay: 0.6s" />
+      <rect class="cb-muted" x="886" y="333" width="150" height="14" rx="7" />
+
+      <!-- botão de aprovação -->
+      <rect class="cb-shadow" x="816" y="408" width="276" height="82" rx="18" />
+      <g class="cb-press cb-anim">
+        <rect class="cb-yellow cb-outline" x="810" y="402" width="276" height="82" rx="18" />
+        <path class="cb-check-ink" d="M920 443 l18 18 l34 -34" />
+      </g>
+
+      <!-- clique humano -->
+      <circle class="cb-ripple cb-anim" cx="1000" cy="450" r="34" />
+      <g class="cb-cursor cb-anim">
+        <path class="cb-shadow" d="M1010 460 v76 l20 -18 l16 34 l16 -8 l-16 -33 l27 -3 z" />
+        <path class="cb-paper cb-outline" d="M1000 450 v76 l20 -18 l16 34 l16 -8 l-16 -33 l27 -3 z" />
+      </g>
+    </g>
+  </g>
+
+  <!-- balão de chat rachado: metade de baixo -->
+  <path class="cb-shadow" d="M120 450 L170 420 L215 460 L260 415 L310 462 L355 418 L405 460 L450 422 L480 450 L480 540 Q480 570 450 570 L230 570 L160 620 L175 570 L150 570 Q120 570 120 540 Z" />
+  <g class="cb-wobble cb-anim" style="animation-duration: 5s">
+    <path class="cb-paper cb-outline" d="M110 440 L160 410 L205 450 L250 405 L300 452 L345 408 L395 450 L440 412 L470 440 L470 530 Q470 560 440 560 L220 560 L150 610 L165 560 L140 560 Q110 560 110 530 Z" />
+    <rect class="cb-muted" x="160" y="490" width="170" height="16" rx="8" />
+    <rect class="cb-muted" x="160" y="518" width="110" height="16" rx="8" />
+  </g>
+
+  <!-- metade de cima, arrancada para cima e para a esquerda -->
+  <g transform="translate(-40 -120) rotate(-16 290 390)">
+    <path class="cb-shadow" d="M120 450 L120 370 Q120 340 150 340 L450 340 Q480 340 480 370 L480 450 L450 422 L405 460 L355 418 L310 462 L260 415 L215 460 L170 420 Z" />
+    <g class="cb-wobble cb-anim">
+      <path class="cb-paper cb-outline" d="M110 440 L110 360 Q110 330 140 330 L440 330 Q470 330 470 360 L470 440 L440 412 L395 450 L345 408 L300 452 L250 405 L205 450 L160 410 Z" />
+      <rect class="cb-muted" x="160" y="364" width="210" height="16" rx="8" />
+    </g>
+  </g>
+
+  <!-- linhas de impacto: o painel saiu de dentro do balão -->
+  <g class="cb-pop cb-anim">
+    <path class="cb-line" d="M205 392 L180 360" />
+    <path class="cb-line" d="M292 380 L292 342" />
+    <path class="cb-line" d="M378 388 L404 356" />
+  </g>
+
+  <!-- pontinhos de digitando caindo para fora -->
+  <circle class="cb-ink cb-dot cb-anim" cx="80" cy="400" r="14" />
+  <circle class="cb-ink cb-dot cb-dot-2 cb-anim" cx="58" cy="460" r="14" />
+  <circle class="cb-ink cb-dot cb-dot-3 cb-anim" cx="46" cy="520" r="14" />
+</svg>

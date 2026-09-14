@@ -1,0 +1,29 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import TileStamp from '../components/TileStamp.astro';
+---
+
+<BaseLayout lang="pt" title="404">
+  <section class="grid gap-12 py-8 md:grid-cols-[minmax(0,1fr)_16rem] md:items-center">
+    <div>
+      <h1 class="display text-[clamp(5rem,20vw,11rem)] text-[var(--color-ink)]">404</h1>
+      <p class="heading mt-6 text-2xl text-[var(--color-accent)]">Essa rota não está ligada a nada.</p>
+      <p class="mt-2 text-lg text-[var(--color-ink-soft)]">This route isn't wired to anything.</p>
+      <pre class="mt-8 max-w-xl overflow-x-auto rounded-md bg-[var(--color-card)] p-5 font-mono text-sm leading-relaxed text-[var(--color-ink-soft)]"><span class="text-[var(--color-muted)]">$</span> curl -I <span data-missing-path>/</span>
+<span class="text-[var(--color-tile-red)]">HTTP/2 404</span>
+<span class="text-[var(--color-muted)]">$</span> <span class="text-[var(--color-accent)]">cd</span> ~</pre>
+      <div class="mt-8 flex flex-wrap gap-3">
+        <a href="/pt/" class="btn btn-primary">Ver o currículo</a>
+        <a href="/pt/blog" class="btn btn-ghost">Ir para o blog</a>
+        <a href="/en/" class="btn btn-ghost">English version</a>
+      </div>
+    </div>
+    <TileStamp seed="404-desconectado" class="hidden w-full md:grid" />
+  </section>
+
+  <script data-astro-rerun is:inline>
+    document.querySelectorAll('[data-missing-path]').forEach(function (el) {
+      el.textContent = window.location.pathname;
+    });
+  </script>
+</BaseLayout>

@@ -1,71 +1,23 @@
 ---
-import { getCollection, render } from 'astro:content';
+import { render } from 'astro:content';
 import BaseLayout from '../../../layouts/BaseLayout.astro';
-import BackButton from '../../../components/BackButton.astro';
-import TileStamp from '../../../components/TileStamp.astro';
-import PostCover from '../../../components/PostCover.astro';
+import PostPage from '../../../components/PostPage.astro';
+import { getPosts, postSlug } from '../../../lib/posts';
 
 export async function getStaticPaths() {
-  const posts = await getCollection('posts', ({ data }) => data.lang === 'en');
+  const posts = await getPosts('en');
   return posts.map((post) => ({
-    params: { slug: post.id.replace('en/', '') },
-    props: { post },
+    params: { slug: postSlug(post) },
+    props: { post, posts },
   }));
 }
 
-const { post } = Astro.props;
+const { post, posts } = Astro.props;
 const { Content } = await render(post);
 ---
 
 <BaseLayout lang="en" title={post.data.title} description={post.data.description}>
-  <article>
-    <header class="mb-12">
-      <BackButton href="/en/blog" label="All posts" />
-      <div class="flex items-center gap-4">
-        <TileStamp seed={post.data.source ?? post.id} class="w-10" />
-        <time datetime={post.data.pubDate.toISOString()} class="text-sm text-[var(--color-muted)]">
-          {post.data.pubDate.toLocaleDateString('en-US', {
-            day: 'numeric', month: 'long', year: 'numeric',
-          })}
-        </time>
-      </div>
-      <h1 class="display mt-6 max-w-4xl text-[clamp(2rem,5.5vw,3.5rem)] leading-[1.02] text-[var(--color-ink)]">{post.data.title}</h1>
-      <p class="mt-5 max-w-2xl font-serif text-xl leading-relaxed text-[var(--color-ink-soft)] md:text-2xl">{post.data.description}</p>
-      {post.data.tags.length > 0 && (
-        <div class="mt-5 flex flex-wrap gap-2">
-          {post.data.tags.map((t) => (
-            <span class="chip">{t}</span>
-          ))}
-        </div>
-      )}
-      {post.data.image ? (
-        <img
-          src={post.data.image}
-          alt=""
-          class="mt-10 aspect-[1200/630] w-full rounded-md border border-[var(--color-border)] object-cover"
-        />
-      ) : (
-        <PostCover seed={post.data.source ?? post.id} class="mt-10" />
-      )}
-    </header>
-
-    <div class="prose-post">
-      <Content />
-    </div>
-
-    {post.data.source && (
-      <footer class="mt-12 max-w-[66ch] border-t border-[var(--color-border)] pt-5 text-sm text-[var(--color-muted)]">
-        <p>
-          Original source:{' '}
-          <a href={post.data.source} target="_blank" rel="noopener" class="font-medium text-[var(--color-ink)] underline decoration-[var(--color-accent)] decoration-2 underline-offset-4 hover:text-[var(--color-accent)]">
-            {post.data.sourceName ?? post.data.source}
-          </a>
-        </p>
-      </footer>
-    )}
-
-    <div class="mt-8">
-      <BackButton href="/en/blog" label="Back to blog" />
-    </div>
-  </article>
+  <PostPage post={post} posts={posts}>
+    <Content />
+  </PostPage>
 </BaseLayout>

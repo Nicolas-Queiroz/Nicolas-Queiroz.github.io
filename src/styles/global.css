@@ -23,6 +23,10 @@
    variáveis de @theme que alguma classe usa. */
 :root {
   --color-on-accent: #1d1604;
+  --color-overlay: rgba(5, 9, 24, 0.6);
+
+  /* Tinta das ilustrações de capa: igual nos dois temas. */
+  --color-art-ink: #0d1530;
 
   /* Peças de circuito: desligadas ficam apagadas, ligadas ao agente acendem. */
   --color-tile-blue: #3f6df6;
@@ -49,6 +53,7 @@
   --color-accent-hover: #1a37aa;
   --color-accent-soft: rgba(37, 73, 214, 0.09);
   --color-on-accent: #ffffff;
+  --color-overlay: rgba(18, 26, 58, 0.35);
   --color-border: #d6dcef;
 
   --color-tile-blue: #2549d6;
@@ -261,6 +266,284 @@ body {
   align-self: start;
 }
 
+/* ---- Capas e cards de post --------------------------------------------- */
+
+.post-cover {
+  aspect-ratio: 1200 / 630;
+  overflow: hidden;
+  border-radius: 8px;
+  background: var(--color-bg-soft);
+}
+
+.post-cover > svg,
+.post-cover > img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.post-card-cover {
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+}
+
+/* O card "levanta" como adesivo, com a mesma sombra dura das ilustrações. */
+.post-card:hover .post-card-cover,
+.post-card:focus-visible .post-card-cover {
+  transform: translate(-4px, -4px);
+  box-shadow: 8px 8px 0 var(--color-accent);
+}
+
+.reading-progress {
+  position: fixed;
+  inset: 0 0 auto;
+  z-index: 50;
+  height: 3px;
+  pointer-events: none;
+}
+
+.reading-progress span {
+  display: block;
+  height: 100%;
+  background: var(--color-accent);
+  transform: scaleX(0);
+  transform-origin: left;
+}
+
+/* ---- Chips interativos (filtro do blog, stack) ------------------------- */
+
+.filter-chip,
+.skill-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  padding: 0.35rem 0.7rem;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--color-ink-soft);
+  transition: background-color 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+button.filter-chip:hover,
+button.skill-chip:hover {
+  border-color: var(--color-accent);
+  color: var(--color-ink);
+}
+
+.filter-chip[aria-pressed="true"],
+.skill-chip[aria-pressed="true"] {
+  background: var(--color-accent);
+  border-color: var(--color-accent);
+  color: var(--color-on-accent);
+}
+
+.skill-chip.is-static {
+  border-style: dashed;
+  color: var(--color-muted);
+}
+
+.filter-count {
+  font-size: 0.7rem;
+  opacity: 0.65;
+}
+
+.skill-target {
+  border-radius: 6px;
+  transition: opacity 0.25s ease, background-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.is-filtering .skill-target:not(.is-match) {
+  opacity: 0.35;
+}
+
+.skill-target.is-match {
+  background: var(--color-accent-soft);
+  box-shadow: 0 0 0 0.5rem var(--color-accent-soft);
+}
+
+.timeline-current {
+  animation: timeline-pulse 2.4s ease-out infinite;
+}
+
+@keyframes timeline-pulse {
+  0% {
+    box-shadow: 0 0 0 4px var(--color-bg), 0 0 0 4px var(--color-accent);
+  }
+  70%,
+  100% {
+    box-shadow: 0 0 0 4px var(--color-bg), 0 0 0 14px transparent;
+  }
+}
+
+.contact-link {
+  font-weight: 500;
+  color: var(--color-ink);
+  text-decoration: underline;
+  text-decoration-color: var(--color-accent);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
+  word-break: break-all;
+}
+
+.contact-link:hover {
+  color: var(--color-accent);
+}
+
+/* ---- Grafo do agente MCP ----------------------------------------------- */
+
+.knowledge-graph {
+  width: 100%;
+  height: auto;
+  overflow: visible;
+}
+
+.kg-edge {
+  stroke: var(--color-trace-off);
+  stroke-width: 2.5;
+  stroke-dasharray: 6 7;
+  animation: kg-flow 1.6s linear infinite;
+  animation-delay: calc(var(--i) * -0.3s);
+  transition: stroke 0.2s ease, opacity 0.2s ease;
+}
+
+@keyframes kg-flow {
+  to {
+    stroke-dashoffset: -26;
+  }
+}
+
+.kg-node circle {
+  stroke: var(--color-card);
+  stroke-width: 4;
+  transition: transform 0.2s ease;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+
+.kg-agent circle {
+  fill: var(--color-tile-red);
+}
+
+.kg-skill circle {
+  fill: var(--color-tile-yellow);
+}
+
+.kg-graph circle {
+  fill: var(--color-tile-blue);
+}
+
+.kg-node text {
+  fill: var(--color-ink-soft);
+  font-size: 13px;
+  font-weight: 500;
+  transition: opacity 0.2s ease;
+}
+
+.kg-node {
+  cursor: default;
+  outline: none;
+}
+
+.kg-node:focus-visible circle {
+  stroke: var(--color-accent);
+}
+
+.is-focused .kg-edge:not(.is-active),
+.is-focused .kg-node:not(.is-active) {
+  opacity: 0.3;
+}
+
+.kg-edge.is-active {
+  stroke: var(--color-accent);
+}
+
+.kg-node.is-active circle {
+  transform: scale(1.15);
+}
+
+/* ---- Busca rápida ------------------------------------------------------ */
+
+.palette-trigger {
+  display: inline-flex;
+  height: 2rem;
+  align-items: center;
+  gap: 0.5rem;
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  padding: 0 0.55rem;
+  font-size: 0.8rem;
+  color: var(--color-muted);
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+
+.palette-trigger:hover {
+  border-color: var(--color-accent);
+  color: var(--color-ink);
+}
+
+.palette-trigger kbd {
+  border-radius: 4px;
+  background: var(--color-bg-soft);
+  padding: 0.05rem 0.35rem;
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+}
+
+.palette {
+  margin: 12vh auto auto;
+  width: min(36rem, calc(100% - 2rem));
+  border: 1px solid var(--color-border);
+  border-radius: 10px;
+  background: var(--color-card);
+  color: var(--color-ink);
+  padding: 0;
+}
+
+/* O foco já é visível pelo cursor dentro do diálogo; sem contorno no campo. */
+.palette input:focus-visible {
+  outline: none;
+}
+
+.palette::backdrop {
+  background: var(--color-overlay);
+  backdrop-filter: blur(2px);
+}
+
+.palette[open] {
+  animation: palette-in 0.16s ease-out;
+}
+
+@keyframes palette-in {
+  from {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.98);
+  }
+}
+
+.palette-group {
+  padding: 0.75rem 0.75rem 0.25rem;
+  font-size: 0.75rem;
+  color: var(--color-muted);
+}
+
+.palette-item {
+  display: block;
+  width: 100%;
+  border-radius: 6px;
+  padding: 0.6rem 0.75rem;
+  text-align: left;
+  font-size: 0.9rem;
+  color: var(--color-ink);
+}
+
+.palette-item:hover,
+.palette-item.is-active {
+  background: var(--color-accent-soft);
+  color: var(--color-accent);
+}
+
 /* ---- Article / long-form typography ----------------------------------- */
 
 .prose-post {
@@ -393,6 +676,10 @@ body {
   ::view-transition-new(root) {
     animation: none;
   }
+  .timeline-current,
+  .kg-edge,
+  .palette[open],
+  .post-card-cover,
   .tile,
   .tile-wall .tile,
   .tile-wall,

@@ -1,0 +1,100 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <style>
+    .fe-bg { fill: var(--color-tile-blue, #3f6df6); }
+    .fe-shadow { fill: var(--color-art-ink, #0d1530); opacity: 0.2; }
+    .fe-paper { fill: var(--color-tile-paper, #eef1fa); stroke: var(--color-art-ink, #0d1530); stroke-width: 6; stroke-linejoin: round; }
+    .fe-rule { stroke: var(--color-tile-blue, #3f6df6); stroke-width: 3; opacity: 0.3; stroke-linecap: round; }
+    .fe-margin { stroke: var(--color-tile-red, #ef476f); stroke-width: 4; stroke-linecap: round; }
+    .fe-scribble { fill: none; stroke: var(--color-art-ink, #0d1530); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; opacity: 0.55; }
+    .fe-math { fill: var(--color-art-ink, #0d1530); font-family: "Newsreader", Georgia, serif; font-style: italic; }
+    .fe-ribbon-shadow { fill: none; stroke: var(--color-art-ink, #0d1530); stroke-width: 90; opacity: 0.2; }
+    .fe-ribbon-edge { fill: none; stroke: var(--color-art-ink, #0d1530); stroke-width: 90; }
+    .fe-ribbon { fill: none; stroke: var(--color-tile-paper, #eef1fa); stroke-width: 78; }
+    .fe-feed { fill: none; stroke: var(--color-art-ink, #0d1530); stroke-width: 78; opacity: 0.1; stroke-dasharray: 4 116; }
+    .fe-code { fill: var(--color-art-ink, #0d1530); font-family: "JetBrains Mono", ui-monospace, monospace; font-size: 21px; font-weight: 500; }
+    .fe-code-key { fill: var(--color-tile-blue, #3f6df6); font-weight: 700; }
+    .fe-seal { fill: var(--color-tile-green, #2cb67d); stroke: var(--color-art-ink, #0d1530); stroke-width: 6; }
+    .fe-seal-ring { fill: none; stroke: var(--color-tile-paper, #eef1fa); stroke-width: 5; stroke-dasharray: 14 12; stroke-linecap: round; opacity: 0.85; }
+    .fe-check-under { fill: none; stroke: var(--color-art-ink, #0d1530); stroke-width: 34; stroke-linecap: round; stroke-linejoin: round; }
+    .fe-check { fill: none; stroke: var(--color-tile-paper, #eef1fa); stroke-width: 22; stroke-linecap: round; stroke-linejoin: round; }
+    .fe-cal-head { fill: var(--color-tile-red, #ef476f); stroke: var(--color-art-ink, #0d1530); stroke-width: 6; stroke-linejoin: round; }
+    .fe-cal-ring { fill: var(--color-art-ink, #0d1530); }
+    .fe-num { fill: var(--color-art-ink, #0d1530); font-family: "JetBrains Mono", ui-monospace, monospace; font-weight: 700; font-size: 72px; }
+    .fe-star { fill: var(--color-tile-yellow, #ffc83d); stroke: var(--color-art-ink, #0d1530); stroke-width: 5; stroke-linejoin: round; }
+
+    .fe-feed.fe-anim { animation: fe-feed 6s linear infinite; }
+    .fe-seal-group.fe-anim { transform-box: fill-box; transform-origin: center; animation: fe-pulse 4s ease-in-out infinite; }
+    .fe-ring.fe-anim { transform-box: fill-box; transform-origin: center; animation: fe-spin 8s linear infinite; }
+    .fe-cal.fe-anim { transform-box: fill-box; transform-origin: 50% 0; animation: fe-swing 5s ease-in-out infinite; }
+
+    @keyframes fe-feed { to { stroke-dashoffset: -240; } }
+    @keyframes fe-pulse { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.06); } }
+    @keyframes fe-spin { to { transform: rotate(360deg); } }
+    @keyframes fe-swing { 0%, 100% { transform: rotate(-4deg); } 50% { transform: rotate(4deg); } }
+
+    @media (prefers-reduced-motion: reduce) { .fe-anim { animation: none !important; } }
+  </style>
+
+  <defs>
+    <path id="fe-ribbon-path" d="M 360 478 C 610 478, 560 175, 715 175 C 850 175, 770 395, 880 395" />
+  </defs>
+
+  <rect class="fe-bg" width="1200" height="630" />
+
+  <!-- Fita com a prova em Lean saindo da margem -->
+  <use href="#fe-ribbon-path" class="fe-ribbon-shadow" transform="translate(10 10)" />
+  <use href="#fe-ribbon-path" class="fe-ribbon-edge" />
+  <use href="#fe-ribbon-path" class="fe-ribbon" />
+  <use href="#fe-ribbon-path" class="fe-feed fe-anim" />
+  <text class="fe-code" dy="7"><textPath href="#fe-ribbon-path" startOffset="200"><tspan class="fe-code-key">theorem</tspan> flt : xⁿ + yⁿ ≠ zⁿ := <tspan class="fe-code-key">by</tspan> exact ∎</textPath></text>
+
+  <!-- Página do caderno -->
+  <g transform="rotate(-4 285 320)">
+    <rect class="fe-shadow" x="70" y="75" width="440" height="500" rx="12" />
+    <rect class="fe-paper" x="60" y="65" width="440" height="500" rx="12" />
+    <line class="fe-rule" x1="84" y1="140" x2="476" y2="140" />
+    <line class="fe-rule" x1="84" y1="190" x2="476" y2="190" />
+    <line class="fe-rule" x1="84" y1="240" x2="476" y2="240" />
+    <line class="fe-rule" x1="84" y1="290" x2="476" y2="290" />
+    <line class="fe-rule" x1="84" y1="340" x2="476" y2="340" />
+    <line class="fe-rule" x1="84" y1="390" x2="476" y2="390" />
+    <line class="fe-rule" x1="84" y1="440" x2="476" y2="440" />
+    <line class="fe-rule" x1="84" y1="490" x2="476" y2="490" />
+    <line class="fe-rule" x1="84" y1="540" x2="476" y2="540" />
+    <line class="fe-margin" x1="412" y1="80" x2="412" y2="550" />
+
+    <text class="fe-math" x="92" y="228" font-size="64">x<tspan dy="-26" font-size="38">n</tspan><tspan dy="26"> + y</tspan><tspan dy="-26" font-size="38">n</tspan></text>
+    <text class="fe-math" x="118" y="330" font-size="64">≠ z<tspan dy="-26" font-size="38">n</tspan></text>
+    <text class="fe-math" x="96" y="428" font-size="40" opacity="0.7">n &gt; 2</text>
+
+    <!-- A famosa anotação apertada na margem -->
+    <path class="fe-scribble" d="M 428 132 q 8 -8 16 0 t 16 0 t 16 0" />
+    <path class="fe-scribble" d="M 428 162 q 8 -8 16 0 t 16 0 t 16 0" />
+    <path class="fe-scribble" d="M 428 192 q 8 -8 16 0 t 16 0" />
+    <path class="fe-scribble" d="M 428 222 q 6 -8 12 0 t 12 0 t 12 0 t 12 0" />
+  </g>
+
+  <!-- Selo de verificado -->
+  <g class="fe-seal-group fe-anim">
+    <circle class="fe-shadow" cx="980" cy="405" r="118" />
+    <circle class="fe-seal" cx="970" cy="395" r="118" />
+    <circle class="fe-seal-ring fe-ring fe-anim" cx="970" cy="395" r="94" />
+    <path class="fe-check-under" d="M 918 400 L 956 438 L 1028 360" />
+    <path class="fe-check" d="M 918 400 L 956 438 L 1028 360" />
+  </g>
+
+  <!-- Estrelinhas -->
+  <path class="fe-star" d="M 600 92 l 9 -24 l 9 24 l 24 9 l -24 9 l -9 24 l -9 -24 l -24 -9 z" />
+  <path class="fe-star" d="M 1112 520 l 6 -16 l 6 16 l 16 6 l -16 6 l -6 16 l -6 -16 l -16 -6 z" />
+
+  <!-- Calendário: 11 dias -->
+  <g class="fe-cal fe-anim">
+    <rect class="fe-shadow" x="1022" y="62" width="130" height="146" rx="12" />
+    <rect class="fe-paper" x="1016" y="58" width="130" height="146" rx="12" transform="rotate(6 1081 131)" opacity="0.7" />
+    <rect class="fe-paper" x="1012" y="52" width="130" height="146" rx="12" />
+    <path class="fe-cal-head" d="M 1012 98 V 64 a 12 12 0 0 1 12 -12 h 106 a 12 12 0 0 1 12 12 V 98 Z" />
+    <rect class="fe-cal-ring" x="1042" y="38" width="12" height="28" rx="6" />
+    <rect class="fe-cal-ring" x="1100" y="38" width="12" height="28" rx="6" />
+    <text class="fe-num" x="1077" y="176" text-anchor="middle">11</text>
+  </g>
+</svg>

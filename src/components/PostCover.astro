@@ -1,43 +1,63 @@
 ---
-// Capa gerada do post: uma placa de circuito com rotas acesas saindo do agente.
-// Usa as mesmas peças do carimbo, então acompanha o tema claro/escuro.
+// Capa do post.
+// - `image` apontando para um .svg em public/: o SVG é inlinado, então as
+//   ilustrações usam as variáveis de cor do tema e animam com CSS.
+// - `image` com outro formato: <img> normal.
+// - Sem `image`: placa de circuito gerada a partir da seed do post.
+import fs from 'node:fs';
+import path from 'node:path';
 import CircuitShape from './CircuitShape.astro';
 import { makeCircuit } from '../lib/circuit';
+import { postSeed, type Post } from '../lib/posts';
 
 interface Props {
-  seed: string;
+  post: Post;
   class?: string;
 }
 
-const { seed, class: className = '' } = Astro.props;
+const { post, class: className = '' } = Astro.props;
+const image = post.data.image;
+
+let inlineSvg: string | null = null;
+if (image?.endsWith('.svg')) {
+  const file = path.join(process.cwd(), 'public', image);
+  if (fs.existsSync(file)) {
+    inlineSvg = fs
+      .readFileSync(file, 'utf8')
+      .replace(/<\?xml[^>]*>/, '')
+      .replace('<svg', '<svg aria-hidden="true" focusable="false"');
+  }
+}
 
 const COLS = 10;
 const ROWS = 5;
 const CELL = 100;
 const GAP = 4;
-
-const pieces = makeCircuit(seed, COLS, ROWS, { routes: 3, maxLive: 0.4 });
+const pieces = !image ? makeCircuit(postSeed(post), COLS, ROWS, { routes: 3, maxLive: 0.4 }) : [];
 const width = COLS * (CELL + GAP) + GAP;
 const height = ROWS * (CELL + GAP) + GAP;
 ---
 
-<svg
-  class={`post-cover block h-auto w-full ${className}`}
-  viewBox={`0 0 ${width} ${height}`}
-  aria-hidden="true"
-  focusable="false"
->
-  <rect class="cover-grout" width={width} height={height} rx="10" />
-  {pieces.map((piece, i) => (
-    <svg
-      x={GAP + (i % COLS) * (CELL + GAP)}
-      y={GAP + Math.floor(i / COLS) * (CELL + GAP)}
-      width={CELL}
-      height={CELL}
-      viewBox="0 0 100 100"
-      class:list={{ 'is-live': piece.live }}
-    >
-      <CircuitShape piece={piece} />
+<div class={`post-cover ${className}`}>
+  {inlineSvg ? (
+    <Fragment set:html={inlineSvg} />
+  ) : image ? (
+    <img src={image} alt="" loading="lazy" />
+  ) : (
+    <svg viewBox={`0 0 ${width} ${height}`} preserveAspectRatio="xMidYMid slice" aria-hidden="true" focusable="false">
+      <rect class="cover-grout" width={width} height={height} />
+      {pieces.map((piece, i) => (
+        <svg
+          x={GAP + (i % COLS) * (CELL + GAP)}
+          y={GAP + Math.floor(i / COLS) * (CELL + GAP)}
+          width={CELL}
+          height={CELL}
+          viewBox="0 0 100 100"
+          class:list={{ 'is-live': piece.live }}
+        >
+          <CircuitShape piece={piece} />
+        </svg>
+      ))}
     </svg>
-  ))}
-</svg>
+  )}
+</div>

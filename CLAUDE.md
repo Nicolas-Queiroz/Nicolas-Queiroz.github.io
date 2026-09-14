@@ -36,7 +36,7 @@ Isso gera rascunhos em `drafts/pt/` e `drafts/en/` — nunca publica direto.
 
 - Posts publicados: `src/content/posts/pt/` e `src/content/posts/en/`
 - Rascunhos do bot (pré-revisão): `drafts/pt/` e `drafts/en/`
-- Capas: geradas automaticamente por `src/components/PostCover.astro` (placa de circuito derivada da seed do post). Imagem manual opcional em `public/posts-images/`
+- Capas: ilustrações SVG em `public/posts-images/` (ver "Como criar a capa do post"). `src/components/PostCover.astro` inlina o SVG para herdar as cores do tema; sem `image`, cai numa placa de circuito gerada
 - Dados pessoais (bio, skills, experiência): `src/data/profile.ts`
 
 Schema do frontmatter (`src/content.config.ts`):
@@ -48,21 +48,24 @@ lang: "pt" | "en"       # obrigatório
 tags: string[]          # opcional, default []
 source: string (URL)    # opcional
 sourceName: string      # opcional
-image: string           # opcional, substitui a capa gerada. Ex.: "/posts-images/slug.png"
+image: string           # esperado: "/posts-images/AAAA-MM-DD-slug-pt.svg" (mesmo arquivo no PT e no EN)
 ```
 
-Rotas dinâmicas que renderizam os posts: `src/pages/pt/blog/[...slug].astro`
-e `src/pages/en/blog/[...slug].astro`. Listagens em
-`src/pages/pt/blog/index.astro` e `src/pages/en/blog/index.astro`.
-Card de post reutilizado em ambas: `src/components/ArticleCard.astro`.
+Página inicial (`/pt/`, `/en/`) é o currículo: `src/components/ResumeContent.astro`.
+`/pt/sobre` e `/en/about` só redirecionam para ela.
+Rotas dinâmicas dos posts: `src/pages/{pt,en}/blog/[...slug].astro`, que
+delegam para `src/components/PostPage.astro`. Listagens em
+`src/pages/{pt,en}/blog/index.astro`, via `src/components/BlogIndex.astro`.
+Card de post: `src/components/ArticleCard.astro`. Helpers de posts (ordenação,
+href, tempo de leitura, relacionados): `src/lib/posts.ts`.
 
 ## Convenções
 
 - Nome de arquivo de post: `AAAA-MM-DD-slug.md`
 - Slug: kebab-case, sem acento, curto (~50 caracteres)
 - Todo post em PT deve ter equivalente em EN (mesma data, slug pode diferir por idioma — a UI não assume slugs iguais entre `pt/` e `en/`)
-- Capa de post: não criar SVG à mão. Sem `image` no frontmatter, a página do post gera a capa com as peças de circuito (`src/lib/circuit.ts`), já nas cores do tema claro e escuro. A seed é `source` (ou o id do arquivo), então preencher `source` faz PT e EN terem a mesma capa e o mesmo carimbo. Só usar `image` quando houver uma imagem real que agregue (foto, diagrama, print)
-- Identidade visual: peças de circuito (trilhas, chips, nós) na paleta `--color-tile-*`; peça ligada ao agente (bloco vermelho) fica azul com trilha amarela, desligada fica apagada. Reutilizar `Tile`, `TileStamp`, `TileWall` e `PostCover` em vez de criar gráficos novos
+- Todo post tem capa ilustrada sobre o tema do post (ver seção abaixo); PT e EN apontam para o mesmo SVG
+- Identidade visual do site: peças de circuito (trilhas, chips, nós) na paleta `--color-tile-*`, usadas no puzzle do início (`TileWall`) e no logo (`TileStamp`). As capas usam a mesma paleta, mas com ilustração própria de cada assunto
 - Cores sempre via as variáveis de `src/styles/global.css` (`var(--color-accent)`, `--color-ink`, `--color-bg`, `--color-card`, `--color-border`, etc.) — nunca hardcode hex ou classes de cor fixas do Tailwind
 - Layout base é sempre `src/layouts/BaseLayout.astro`
 
@@ -91,6 +94,24 @@ de code review e base de conhecimento em grafo no Obsidian. Interesses
 fortes: agentes de IA, MCP, arquitetura modular desacoplada, automação,
 código configurável/documentado/testado. Não inventar clientes, tecnologias
 que ele não usa, ou opiniões fora deste contexto.
+
+## Como criar a capa do post
+
+A capa é uma ilustração criativa sobre o assunto do post, nunca um gráfico
+genérico. Pense numa metáfora visual da notícia (ex.: "a margem era pequena
+demais" virando uma fita de prova em Lean; uma balança entre comprar e
+construir; um balão de chat rachando e revelando uma UI de aprovação; uma
+portaria na nuvem barrando crawlers). Use as capas existentes em
+`public/posts-images/` como referência de nível.
+
+- Arquivo: `public/posts-images/AAAA-MM-DD-slug-pt.svg`, `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">`, sem prolog XML
+- Sem texto em linguagem natural (a mesma capa serve PT e EN). Símbolos, números, código e matemática podem
+- Cores só via classes num `<style>` interno, sempre com fallback: `fill: var(--color-tile-blue, #3f6df6)`. Variáveis: `--color-tile-blue`, `--color-tile-yellow`, `--color-tile-green`, `--color-tile-red`, `--color-tile-paper`, `--color-art-ink`
+- Prefixo único por capa (2–3 letras + `-`) em todas as classes, keyframes e ids, porque o SVG é inlinado junto de outras capas
+- Estilo: flat geométrico, formas grandes, contorno `--color-art-ink` com stroke-width 6 e cantos arredondados, fundo full-bleed numa cor da paleta (variar entre posts vizinhos), e sombra de adesivo (cópia da forma deslocada 10,10 em art-ink com opacity .2)
+- Precisa funcionar como miniatura de ~360px: poucos detalhes minúsculos, nada cortado nas bordas
+- Animação sutil: 2–3 loops CSS (transform/opacity), 3–8s, sem SMIL; elementos animados com a classe `<prefixo>-anim` e `@media (prefers-reduced-motion: reduce) { .<prefixo>-anim { animation: none !important; } }`
+- Revisar renderizando nos temas claro e escuro antes de publicar
 
 ## Anti-padrões (evitar sempre)
 

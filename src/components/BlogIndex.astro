@@ -1,0 +1,116 @@
+---
+// Listagem do blog compartilhada entre PT e EN: post em destaque + filtro por tag.
+import ArticleCard from './ArticleCard.astro';
+import { getPosts, type Lang } from '../lib/posts';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const posts = await getPosts(lang);
+const [featured, ...rest] = posts;
+
+const tagCounts = new Map<string, number>();
+posts.forEach((p) => p.data.tags.forEach((tag) => tagCounts.set(tag, (tagCounts.get(tag) ?? 0) + 1)));
+const tags = [...tagCounts.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
+
+const t = {
+  pt: {
+    intro: 'Anotações e reflexões sobre backend, cloud, Python, Odoo e o que vou aprendendo no dia a dia.',
+    filter: 'Filtrar por tema',
+    all: 'Todos',
+    empty: 'Ainda não há posts publicados. Volte em breve.',
+    none: 'Nenhum post com esse tema ainda.',
+    count: (n: number) => (n === 1 ? '1 post' : `${n} posts`),
+  },
+  en: {
+    intro: "Notes and thoughts on backend, cloud, Python, Odoo, and whatever I'm learning day to day.",
+    filter: 'Filter by topic',
+    all: 'All',
+    empty: 'No posts published yet. Come back soon.',
+    none: 'No posts on this topic yet.',
+    count: (n: number) => (n === 1 ? '1 post' : `${n} posts`),
+  },
+}[lang];
+---
+
+<header class="mb-12 grid gap-6 md:grid-cols-[minmax(0,1fr)_auto] md:items-end">
+  <div>
+    <h1 class="display text-[clamp(3rem,10vw,5.5rem)] text-[var(--color-ink)]">Blog</h1>
+    <p class="mt-5 max-w-xl text-lg leading-relaxed text-[var(--color-ink-soft)]">{t.intro}</p>
+  </div>
+  {posts.length > 0 && <p class="text-sm text-[var(--color-muted)] md:text-right">{t.count(posts.length)}</p>}
+</header>
+
+{posts.length === 0 ? (
+  <p class="rounded-md border border-dashed border-[var(--color-border)] p-6 text-sm text-[var(--color-muted)]">{t.empty}</p>
+) : (
+  <div data-blog-index>
+    <div class="mb-12 flex flex-wrap items-center gap-2" role="group" aria-label={t.filter}>
+      <button type="button" class="filter-chip" data-filter="" aria-pressed="true">
+        {t.all} <span class="filter-count">{posts.length}</span>
+      </button>
+      {tags.map(([tag, count]) => (
+        <button type="button" class="filter-chip" data-filter={tag} aria-pressed="false">
+          {tag} <span class="filter-count">{count}</span>
+        </button>
+      ))}
+    </div>
+
+    <div data-featured-slot class="mb-16">
+      <ArticleCard post={featured} featured />
+    </div>
+
+    <div class="grid gap-x-8 gap-y-14 md:grid-cols-2 lg:grid-cols-3" data-post-grid>
+      {rest.map((post) => <ArticleCard post={post} />)}
+    </div>
+
+    <p class="hidden rounded-md border border-dashed border-[var(--color-border)] p-6 text-sm text-[var(--color-muted)]" data-filter-empty>
+      {t.none}
+    </p>
+  </div>
+)}
+
+<script data-astro-rerun is:inline>
+  function initBlogFilter() {
+    var root = document.querySelector('[data-blog-index]');
+    if (!root) return;
+    var buttons = root.querySelectorAll('[data-filter]');
+    var cards = root.querySelectorAll('[data-post-card]');
+    var featuredSlot = root.querySelector('[data-featured-slot]');
+    var empty = root.querySelector('[data-filter-empty]');
+
+    function apply(tag) {
+      var visible = 0;
+      buttons.forEach(function (b) {
+        b.setAttribute('aria-pressed', String(b.dataset.filter === tag));
+      });
+      cards.forEach(function (card) {
+        var match = !tag || card.dataset.tags.split('|').indexOf(tag) !== -1;
+        card.hidden = !match;
+        if (match) visible++;
+      });
+      // Esconde o destaque quando ele não bate com o filtro.
+      featuredSlot.hidden = !!tag && featuredSlot.querySelector('[data-post-card]').hidden;
+      empty.hidden = visible > 0;
+      empty.classList.toggle('hidden', visible > 0);
+      var url = new URL(window.location.href);
+      if (tag) url.searchParams.set('tag', tag);
+      else url.searchParams.delete('tag');
+      history.replaceState(history.state, '', url);
+    }
+
+    buttons.forEach(function (b) {
+      b.onclick = function () {
+        apply(b.dataset.filter);
+      };
+    });
+
+    var initial = new URL(window.location.href).searchParams.get('tag') || '';
+    var exists = Array.prototype.some.call(buttons, function (b) { return b.dataset.filter === initial; });
+    apply(exists ? initial : '');
+  }
+
+  initBlogFilter();
+</script>

@@ -1,0 +1,215 @@
+---
+// Busca rápida (Ctrl/⌘ + K): seções do currículo, posts e ações do site.
+import { getPosts, postHref, type Lang } from '../lib/posts';
+
+interface Props {
+  lang: Lang;
+  otherLangHref: string;
+}
+
+const { lang, otherLangHref } = Astro.props;
+const posts = await getPosts(lang);
+
+const t = {
+  pt: {
+    open: 'Buscar',
+    placeholder: 'Buscar seções, posts ou ações',
+    empty: 'Nada encontrado. Tente outro termo.',
+    groups: { pages: 'Currículo', posts: 'Posts', actions: 'Ações' },
+    pages: [
+      { label: 'Início', href: '/pt/' },
+      { label: 'Stack', href: '/pt/#stack' },
+      { label: 'Experiência', href: '/pt/#experiencia' },
+      { label: 'Projetos', href: '/pt/#projetos' },
+      { label: 'Contato', href: '/pt/#contato' },
+      { label: 'Blog', href: '/pt/blog' },
+    ],
+    theme: 'Alternar tema claro/escuro',
+    language: 'Ver o site em inglês',
+    close: 'Fechar busca',
+  },
+  en: {
+    open: 'Search',
+    placeholder: 'Search sections, posts, or actions',
+    empty: 'Nothing found. Try another term.',
+    groups: { pages: 'Resume', posts: 'Posts', actions: 'Actions' },
+    pages: [
+      { label: 'Home', href: '/en/' },
+      { label: 'Stack', href: '/en/#stack' },
+      { label: 'Experience', href: '/en/#experiencia' },
+      { label: 'Projects', href: '/en/#projetos' },
+      { label: 'Contact', href: '/en/#contato' },
+      { label: 'Blog', href: '/en/blog' },
+    ],
+    theme: 'Toggle light/dark theme',
+    language: 'View the site in Portuguese',
+    close: 'Close search',
+  },
+}[lang];
+
+const normalize = (s: string) => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
+---
+
+<button type="button" class="palette-trigger" data-palette-open aria-label={t.open} aria-haspopup="dialog">
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4" aria-hidden="true">
+    <circle cx="11" cy="11" r="7"></circle>
+    <path d="m20 20-3.5-3.5"></path>
+  </svg>
+  <span class="hidden md:inline">{t.open}</span>
+  <kbd class="hidden md:inline">Ctrl K</kbd>
+</button>
+
+<dialog class="palette" data-palette aria-label={t.open}>
+  <div class="flex items-center gap-3 border-b border-[var(--color-border)] px-4">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 shrink-0 text-[var(--color-muted)]" aria-hidden="true">
+      <circle cx="11" cy="11" r="7"></circle>
+      <path d="m20 20-3.5-3.5"></path>
+    </svg>
+    <input
+      type="text"
+      class="w-full bg-transparent py-4 text-base text-[var(--color-ink)] outline-none placeholder:text-[var(--color-muted)]"
+      placeholder={t.placeholder}
+      aria-label={t.placeholder}
+      data-palette-input
+      autocomplete="off"
+    />
+    <button type="button" class="text-xs text-[var(--color-muted)] hover:text-[var(--color-ink)]" data-palette-close aria-label={t.close}>Esc</button>
+  </div>
+  <div class="max-h-[60vh] overflow-y-auto p-2" data-palette-list>
+    <p class="palette-group">{t.groups.pages}</p>
+    {t.pages.map((page) => (
+      <a href={page.href} class="palette-item" data-palette-item data-search={normalize(page.label)}>
+        {page.label}
+      </a>
+    ))}
+    {posts.length > 0 && <p class="palette-group">{t.groups.posts}</p>}
+    {posts.map((post) => (
+      <a
+        href={postHref(post)}
+        class="palette-item"
+        data-palette-item
+        data-search={normalize(`${post.data.title} ${post.data.description} ${post.data.tags.join(' ')}`)}
+      >
+        <span class="block truncate">{post.data.title}</span>
+        <span class="block truncate text-xs text-[var(--color-muted)]">{post.data.tags.join(', ')}</span>
+      </a>
+    ))}
+    <p class="palette-group">{t.groups.actions}</p>
+    <button type="button" class="palette-item" data-palette-item data-palette-action="theme" data-search={normalize(`${t.theme} tema theme dark light`)}>
+      {t.theme}
+    </button>
+    <a href={otherLangHref} class="palette-item" data-palette-item data-search={normalize(`${t.language} idioma language english portugues`)}>
+      {t.language}
+    </a>
+    <p class="hidden px-3 py-6 text-center text-sm text-[var(--color-muted)]" data-palette-empty>{t.empty}</p>
+  </div>
+</dialog>
+
+<script data-astro-rerun is:inline>
+  function initPalette() {
+    var dialog = document.querySelector('[data-palette]');
+    if (!dialog) return;
+    var input = dialog.querySelector('[data-palette-input]');
+    var items = Array.prototype.slice.call(dialog.querySelectorAll('[data-palette-item]'));
+    var groups = dialog.querySelectorAll('.palette-group');
+    var empty = dialog.querySelector('[data-palette-empty]');
+    var active = 0;
+
+    function normalize(s) {
+      return s.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
+    }
+
+    function visibleItems() {
+      return items.filter(function (item) { return !item.hidden; });
+    }
+
+    function setActive(index) {
+      var visible = visibleItems();
+      active = visible.length ? (index + visible.length) % visible.length : 0;
+      items.forEach(function (item) { item.classList.remove('is-active'); });
+      if (visible[active]) {
+        visible[active].classList.add('is-active');
+        visible[active].scrollIntoView({ block: 'nearest' });
+      }
+    }
+
+    function filter() {
+      var terms = normalize(input.value).split(/\s+/).filter(Boolean);
+      items.forEach(function (item) {
+        item.hidden = !terms.every(function (term) { return item.dataset.search.indexOf(term) !== -1; });
+      });
+      // Esconde o título do grupo quando nenhum item dele sobrou.
+      groups.forEach(function (group) {
+        var el = group.nextElementSibling;
+        var any = false;
+        while (el && !el.classList.contains('palette-group')) {
+          if (el.hasAttribute('data-palette-item') && !el.hidden) any = true;
+          el = el.nextElementSibling;
+        }
+        group.hidden = !any;
+      });
+      empty.classList.toggle('hidden', visibleItems().length > 0);
+      setActive(0);
+    }
+
+    function open() {
+      if (dialog.open) return;
+      input.value = '';
+      filter();
+      dialog.showModal();
+      input.focus();
+    }
+
+    function close() {
+      dialog.close();
+    }
+
+    document.querySelectorAll('[data-palette-open]').forEach(function (btn) {
+      btn.onclick = open;
+    });
+    dialog.querySelector('[data-palette-close]').onclick = close;
+    input.oninput = filter;
+
+    // Clique fora do conteúdo (no backdrop) fecha.
+    dialog.onclick = function (e) {
+      if (e.target === dialog) close();
+    };
+
+    items.forEach(function (item) {
+      item.onclick = function () {
+        if (item.dataset.paletteAction === 'theme') {
+          var toggle = document.getElementById('theme-toggle');
+          if (toggle) toggle.click();
+        }
+        close();
+      };
+    });
+
+    input.onkeydown = function (e) {
+      if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+        e.preventDefault();
+        setActive(active + (e.key === 'ArrowDown' ? 1 : -1));
+      } else if (e.key === 'Enter') {
+        var target = visibleItems()[active];
+        if (target) {
+          e.preventDefault();
+          target.click();
+        }
+      }
+    };
+
+    // Atalho global registrado uma vez; sempre busca o diálogo da página atual.
+    if (!window.__paletteShortcut) {
+      window.__paletteShortcut = true;
+      document.addEventListener('keydown', function (e) {
+        if ((e.metaKey || e.ctrlKey) && e.key.toLowerCase() === 'k') {
+          e.preventDefault();
+          var trigger = document.querySelector('[data-palette-open]');
+          if (trigger) trigger.click();
+        }
+      });
+    }
+  }
+
+  initPalette();
+</script>

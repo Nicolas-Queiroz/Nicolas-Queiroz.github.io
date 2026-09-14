@@ -1,10 +1,4 @@
 ---
-import BaseLayout from '../../layouts/BaseLayout.astro';
-import AboutContent from '../../components/AboutContent.astro';
-import BackButton from '../../components/BackButton.astro';
+// O currículo agora é a página inicial; mantém o link antigo funcionando.
+return Astro.redirect('/pt/');
 ---
-
-<BaseLayout lang="pt" title="Sobre">
-  <BackButton href="/pt" label="Início" />
-  <AboutContent lang="pt" />
-</BaseLayout>

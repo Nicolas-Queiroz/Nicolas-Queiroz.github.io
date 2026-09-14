@@ -1,27 +1,8 @@
 ---
 import BaseLayout from '../../../layouts/BaseLayout.astro';
-import ArticleCard from '../../../components/ArticleCard.astro';
-import { getCollection } from 'astro:content';
-
-const posts = (await getCollection('posts', ({ data }) => data.lang === 'en'))
-  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+import BlogIndex from '../../../components/BlogIndex.astro';
 ---
 
 <BaseLayout lang="en" title="Blog">
-  <header class="mb-12">
-    <h1 class="display text-[clamp(3rem,10vw,5.5rem)] text-[var(--color-ink)]">Blog</h1>
-    <p class="mt-5 max-w-xl text-lg leading-relaxed text-[var(--color-ink-soft)]">
-      Notes and thoughts on backend, cloud, Python, Odoo, and whatever I'm learning day to day.
-    </p>
-  </header>
-
-  {posts.length === 0 ? (
-    <p class="rounded-md border border-dashed border-[var(--color-border)] p-6 text-sm text-[var(--color-muted)]">
-      No posts published yet. Come back soon.
-    </p>
-  ) : (
-    <div class="border-b border-[var(--color-border)]">
-      {posts.map((post) => <ArticleCard post={post} lang="en" />)}
-    </div>
-  )}
+  <BlogIndex lang="en" />
 </BaseLayout>

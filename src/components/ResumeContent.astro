@@ -1,0 +1,313 @@
+---
+// Página inicial: currículo completo + últimos posts.
+import ArticleCard from './ArticleCard.astro';
+import CopyButton from './CopyButton.astro';
+import KnowledgeGraph from './KnowledgeGraph.astro';
+import TileWall from './TileWall.astro';
+import { profile } from '../data/profile';
+import { getPosts, type Lang } from '../lib/posts';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+const city = profile.location.split(',')[0];
+
+const t = {
+  pt: {
+    role: `${profile.title.pt} em ${city}.`,
+    email: 'Enviar e-mail',
+    copyEmail: 'Copiar e-mail',
+    copied: 'E-mail copiado',
+    stack: 'Stack',
+    stackHint: 'Clique numa tecnologia para ver onde usei.',
+    stackActive: (skill: string, n: number) => `${skill} aparece em ${n} ${n === 1 ? 'ponto' : 'pontos'} abaixo.`,
+    clear: 'Limpar',
+    experience: 'Experiência',
+    current: 'Atual',
+    projects: 'Projetos',
+    education: 'Formação',
+    languages: 'Idiomas',
+    latest: 'Do blog',
+    seeAll: 'Ver todos os posts',
+    contact: 'Contato',
+    contactIntro: 'O jeito mais rápido de falar comigo é por e-mail.',
+    phone: 'Telefone',
+    groups: {
+      languages: 'Linguagens',
+      frameworks: 'Frameworks',
+      databases: 'Bancos de dados',
+      cloud: 'Cloud & DevOps',
+      integration: 'Integração',
+      tools: 'Ferramentas',
+    },
+  },
+  en: {
+    role: `${profile.title.en} in ${city}.`,
+    email: 'Send an email',
+    copyEmail: 'Copy email',
+    copied: 'Email copied',
+    stack: 'Stack',
+    stackHint: 'Click a technology to see where I used it.',
+    stackActive: (skill: string, n: number) => `${skill} shows up in ${n} ${n === 1 ? 'place' : 'places'} below.`,
+    clear: 'Clear',
+    experience: 'Experience',
+    current: 'Current',
+    projects: 'Projects',
+    education: 'Education',
+    languages: 'Languages',
+    latest: 'From the blog',
+    seeAll: 'See all posts',
+    contact: 'Contact',
+    contactIntro: 'Email is the fastest way to reach me.',
+    phone: 'Phone',
+    groups: {
+      languages: 'Languages',
+      frameworks: 'Frameworks',
+      databases: 'Databases',
+      cloud: 'Cloud & DevOps',
+      integration: 'Integration',
+      tools: 'Tools',
+    },
+  },
+}[lang];
+
+// Termos que indicam cada tecnologia nos textos da experiência e dos projetos.
+const skillTerms: Record<string, string[]> = {
+  Python: ['Python'],
+  TypeScript: ['Angular'],
+  Django: ['Django'],
+  'Odoo 17 Enterprise': ['Odoo'],
+  Angular: ['Angular'],
+  PostgreSQL: ['PostgreSQL'],
+  'Google Cloud Platform': ['GCP', 'Google Cloud'],
+  Docker: ['Docker'],
+  'REST APIs': ['REST', 'API'],
+  Git: ['Git '],
+  Obsidian: ['Obsidian'],
+  'Model Context Protocol': ['Model Context Protocol', 'MCP'],
+  Cordova: ['Cordova'],
+};
+
+const skillsIn = (text: string) =>
+  Object.entries(skillTerms)
+    .filter(([, terms]) => terms.some((term) => text.includes(term)))
+    .map(([skill]) => skill);
+
+const allTexts = [
+  ...profile.experience.flatMap((exp) => exp.bullets[lang]),
+  ...profile.projects.map((p) => `${p.description[lang]} ${p.tags.join(' ')}`),
+];
+const matchCount = (skill: string) => allTexts.filter((text) => skillsIn(text).includes(skill)).length;
+
+const posts = (await getPosts(lang)).slice(0, 3);
+const [firstName, ...restName] = profile.name.split(' ');
+const linkedinHandle = profile.linkedin.replace(/^https:\/\/(www\.)?/, '').replace(/\/$/, '');
+const githubHandle = profile.github.replace('https://', '');
+---
+
+<section class="mb-24 grid items-center gap-12 md:grid-cols-[minmax(0,1fr)_18rem] md:gap-14">
+  <div>
+    <h1 class="display text-[clamp(2.4rem,7.2vw,4.25rem)] text-[var(--color-ink)]">
+      <span class="block">{firstName}</span>
+      <span class="block">{restName.join(' ')}</span>
+    </h1>
+    <p class="heading mt-6 text-xl text-[var(--color-accent)] md:text-2xl">{t.role}</p>
+    <p class="mt-4 max-w-xl font-serif text-xl leading-relaxed text-[var(--color-ink-soft)]">{profile.bio[lang]}</p>
+    <div class="mt-8 flex flex-wrap gap-3">
+      <a href={`mailto:${profile.email}`} class="btn btn-primary">{t.email}</a>
+      <a href={profile.linkedin} target="_blank" rel="noopener" class="btn btn-ghost">LinkedIn</a>
+      <a href={profile.github} target="_blank" rel="noopener" class="btn btn-ghost">GitHub</a>
+    </div>
+  </div>
+  <TileWall lang={lang} />
+</section>
+
+<div data-skill-explorer>
+  <section id="stack" class="mb-24 scroll-mt-24">
+    <div class="mb-6 flex flex-wrap items-baseline justify-between gap-x-6 gap-y-2">
+      <h2 class="heading text-2xl text-[var(--color-ink)] md:text-3xl">{t.stack}</h2>
+      <p class="flex items-center gap-3 text-sm text-[var(--color-muted)]" aria-live="polite">
+        <span data-skill-status data-hint={t.stackHint}>{t.stackHint}</span>
+        <button type="button" class="hidden font-medium text-[var(--color-accent)] hover:underline" data-skill-clear>{t.clear}</button>
+      </p>
+    </div>
+    <dl class="border-b border-[var(--color-border)]">
+      {Object.entries(profile.skills).map(([group, values]) => (
+        <div class="grid gap-2 border-t border-[var(--color-border)] py-4 sm:grid-cols-[11rem_minmax(0,1fr)] sm:gap-6">
+          <dt class="pt-1 text-sm text-[var(--color-muted)]">{t.groups[group as keyof typeof t.groups]}</dt>
+          <dd class="flex flex-wrap gap-2">
+            {values.map((skill) => {
+              const count = matchCount(skill);
+              return count > 0 ? (
+                <button
+                  type="button"
+                  class="skill-chip"
+                  aria-pressed="false"
+                  data-skill={skill}
+                  data-status={t.stackActive(skill, count)}
+                >
+                  {skill}
+                  <span class="filter-count">{count}</span>
+                </button>
+              ) : (
+                <span class="skill-chip is-static">{skill}</span>
+              );
+            })}
+          </dd>
+        </div>
+      ))}
+    </dl>
+  </section>
+
+  <section id="experiencia" class="mb-24 scroll-mt-24">
+    <h2 class="heading mb-10 text-2xl text-[var(--color-ink)] md:text-3xl">{t.experience}</h2>
+    <ol class="relative ml-2 border-l-2 border-[var(--color-border)]">
+      {profile.experience.map((exp, index) => (
+        <li class="relative mb-14 pl-8 last:mb-0 sm:pl-10">
+          <span
+            class:list={[
+              'absolute -left-[9px] top-1.5 h-4 w-4 rotate-45 rounded-[2px] ring-4 ring-[var(--color-bg)]',
+              index === 0 ? 'timeline-current bg-[var(--color-accent)]' : 'bg-[var(--color-muted)]',
+            ]}
+            aria-hidden="true"
+          ></span>
+          <p class="flex flex-wrap items-center gap-3 text-sm text-[var(--color-muted)]">
+            {exp.period}
+            {index === 0 && <span class="chip text-[var(--color-accent)]">{t.current}</span>}
+          </p>
+          <h3 class="heading mt-1 text-xl text-[var(--color-ink)]">{exp.role[lang]}</h3>
+          <p class="mt-0.5 font-medium text-[var(--color-ink-soft)]">{exp.company}</p>
+          <ul class="mt-5 max-w-2xl space-y-2.5 text-[var(--color-ink-soft)]">
+            {exp.bullets[lang].map((bullet) => (
+              <li class="skill-target flex gap-3 leading-relaxed" data-skills={skillsIn(bullet).join('|')}>
+                <span class="mt-[0.6em] h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--color-muted)]" aria-hidden="true"></span>
+                <span>{bullet}</span>
+              </li>
+            ))}
+          </ul>
+        </li>
+      ))}
+    </ol>
+  </section>
+
+  <section id="projetos" class="mb-24 scroll-mt-24">
+    <h2 class="heading mb-8 text-2xl text-[var(--color-ink)] md:text-3xl">{t.projects}</h2>
+    {profile.projects.map((p) => (
+      <article
+        class="skill-target grid items-center gap-8 rounded-md bg-[var(--color-card)] p-6 md:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)] md:p-10"
+        data-skills={skillsIn(`${p.description[lang]} ${p.tags.join(' ')}`).join('|')}
+      >
+        <div>
+          <h3 class="heading text-2xl text-[var(--color-ink)]">{p.name}</h3>
+          <p class="mt-3 leading-relaxed text-[var(--color-ink-soft)]">{p.description[lang]}</p>
+          <div class="mt-5 flex flex-wrap gap-2">
+            {p.tags.map((tag) => (
+              <span class="chip">{tag}</span>
+            ))}
+          </div>
+        </div>
+        <KnowledgeGraph lang={lang} />
+      </article>
+    ))}
+  </section>
+</div>
+
+<section class="mb-24 grid gap-12 md:grid-cols-2">
+  <div>
+    <h2 class="heading mb-4 text-2xl text-[var(--color-ink)]">{t.education}</h2>
+    <p class="font-medium text-[var(--color-ink)]">{profile.education.course[lang]}</p>
+    <p class="text-[var(--color-ink-soft)]">{profile.education.school[lang]}</p>
+    <p class="mt-1 text-sm text-[var(--color-muted)]">{profile.education.period}</p>
+  </div>
+  <div>
+    <h2 class="heading mb-4 text-2xl text-[var(--color-ink)]">{t.languages}</h2>
+    <dl class="space-y-1.5">
+      {profile.languages[lang].map((l) => (
+        <div class="flex flex-wrap gap-x-3">
+          <dt class="font-medium text-[var(--color-ink)]">{l.name}</dt>
+          <dd class="text-[var(--color-ink-soft)]">{l.level}</dd>
+        </div>
+      ))}
+    </dl>
+  </div>
+</section>
+
+{posts.length > 0 && (
+  <section class="mb-24">
+    <div class="mb-8 flex flex-wrap items-baseline justify-between gap-4">
+      <h2 class="heading text-2xl text-[var(--color-ink)] md:text-3xl">{t.latest}</h2>
+      <a href={`/${lang}/blog`} class="text-sm font-medium text-[var(--color-accent)] hover:text-[var(--color-accent-hover)]">{t.seeAll}</a>
+    </div>
+    <div class="grid gap-x-8 gap-y-12 md:grid-cols-3">
+      {posts.map((post) => <ArticleCard post={post} headingLevel="h3" />)}
+    </div>
+  </section>
+)}
+
+<section id="contato" class="scroll-mt-24">
+  <h2 class="display text-[clamp(2.2rem,6vw,3.5rem)] text-[var(--color-ink)]">{t.contact}</h2>
+  <p class="mt-4 text-lg text-[var(--color-ink-soft)]">{t.contactIntro}</p>
+  <dl class="mt-8 border-b border-[var(--color-border)]">
+    <div class="grid items-center gap-2 border-t border-[var(--color-border)] py-4 sm:grid-cols-[11rem_minmax(0,1fr)_auto] sm:gap-6">
+      <dt class="text-sm text-[var(--color-muted)]">E-mail</dt>
+      <dd>
+        <a href={`mailto:${profile.email}`} class="contact-link">{profile.email}</a>
+      </dd>
+      <dd>
+        <CopyButton value={profile.email} label={t.copyEmail} copiedLabel={t.copied} class="btn btn-ghost gap-2 py-2 text-sm" />
+      </dd>
+    </div>
+    <div class="grid gap-2 border-t border-[var(--color-border)] py-4 sm:grid-cols-[11rem_minmax(0,1fr)] sm:gap-6">
+      <dt class="text-sm text-[var(--color-muted)]">{t.phone}</dt>
+      <dd class="text-[var(--color-ink)]">{profile.phone}</dd>
+    </div>
+    <div class="grid gap-2 border-t border-[var(--color-border)] py-4 sm:grid-cols-[11rem_minmax(0,1fr)] sm:gap-6">
+      <dt class="text-sm text-[var(--color-muted)]">LinkedIn</dt>
+      <dd><a href={profile.linkedin} target="_blank" rel="noopener" class="contact-link">{linkedinHandle}</a></dd>
+    </div>
+    <div class="grid gap-2 border-t border-[var(--color-border)] py-4 sm:grid-cols-[11rem_minmax(0,1fr)] sm:gap-6">
+      <dt class="text-sm text-[var(--color-muted)]">GitHub</dt>
+      <dd><a href={profile.github} target="_blank" rel="noopener" class="contact-link">{githubHandle}</a></dd>
+    </div>
+  </dl>
+</section>
+
+<script data-astro-rerun is:inline>
+  function initSkillExplorer() {
+    var root = document.querySelector('[data-skill-explorer]');
+    if (!root) return;
+    var chips = root.querySelectorAll('[data-skill]');
+    var targets = root.querySelectorAll('.skill-target');
+    var status = root.querySelector('[data-skill-status]');
+    var clear = root.querySelector('[data-skill-clear]');
+    var active = null;
+
+    function apply(skill) {
+      active = skill;
+      root.classList.toggle('is-filtering', !!skill);
+      chips.forEach(function (chip) {
+        chip.setAttribute('aria-pressed', String(chip.dataset.skill === skill));
+      });
+      targets.forEach(function (el) {
+        var match = !!skill && el.dataset.skills.split('|').indexOf(skill) !== -1;
+        el.classList.toggle('is-match', match);
+      });
+      var chip = skill && root.querySelector('[data-skill="' + skill + '"]');
+      status.textContent = chip ? chip.dataset.status : status.dataset.hint;
+      clear.classList.toggle('hidden', !skill);
+    }
+
+    chips.forEach(function (chip) {
+      chip.onclick = function () {
+        apply(active === chip.dataset.skill ? null : chip.dataset.skill);
+      };
+    });
+    clear.onclick = function () {
+      apply(null);
+    };
+  }
+
+  initSkillExplorer();
+</script>

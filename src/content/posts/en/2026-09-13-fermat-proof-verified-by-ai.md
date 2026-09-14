@@ -4,6 +4,7 @@ description: "Anthropic says Claude translated an existing proof of Fermat's Las
 pubDate: 2026-09-13
 tags: ["AI", "LLMs", "MCP"]
 lang: "en"
+image: "/posts-images/2026-09-13-prova-fermat-lean.svg"
 ---
 
 Here's what keeps nagging me: if it takes an AI 11 days to translate an entire proof of Fermat's Last Theorem into Lean and come out the other side with something a computer fully verifies, the real shift isn't "the AI understands math." It's the bar we use for the word verified.

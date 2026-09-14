@@ -1,0 +1,29 @@
+---
+// Barra fina no topo que acompanha a leitura do elemento [data-reading-target].
+---
+
+<div class="reading-progress" aria-hidden="true"><span data-reading-bar></span></div>
+
+<script data-astro-rerun is:inline>
+  function initReadingProgress() {
+    var bar = document.querySelector('[data-reading-bar]');
+    var target = document.querySelector('[data-reading-target]');
+    if (!bar || !target) {
+      window.onscroll = null;
+      window.onresize = null;
+      return;
+    }
+    function update() {
+      var rect = target.getBoundingClientRect();
+      var total = rect.height - window.innerHeight;
+      var progress = total > 0 ? Math.min(1, Math.max(0, -rect.top / total)) : 1;
+      bar.style.transform = 'scaleX(' + progress + ')';
+    }
+    // onscroll/onresize substituem o handler da página anterior entre navegações.
+    window.onscroll = update;
+    window.onresize = update;
+    update();
+  }
+
+  initReadingProgress();
+</script>
