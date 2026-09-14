@@ -19,19 +19,19 @@ const t = {
 }[lang];
 ---
 
-<footer class="mt-20 border-t border-[var(--color-border)] bg-[var(--color-bg-soft)]">
-  <div class="mx-auto max-w-4xl px-6 py-10 text-sm text-[var(--color-muted)]">
-    <p class="mb-4 max-w-2xl italic">{t.ai}</p>
-    <div class="flex flex-wrap items-center justify-between gap-4 border-t border-[var(--color-border)] pt-5">
+<footer class="mt-24 border-t border-[var(--color-border)] bg-[var(--color-bg-soft)]">
+  <div class="mx-auto max-w-5xl px-6 py-12 text-sm text-[var(--color-muted)]">
+    <p class="mb-8 max-w-2xl font-serif text-lg italic leading-relaxed text-[var(--color-ink-soft)]">{t.ai}</p>
+    <div class="flex flex-wrap items-center justify-between gap-4 border-t border-[var(--color-border)] pt-6">
       <p>{t.copyright}</p>
       <div class="flex gap-5">
-        <a href={profile.github} target="_blank" rel="noopener" class="transition hover:text-[var(--color-accent)]">
+        <a href={profile.github} target="_blank" rel="noopener" class="transition hover:text-[var(--color-ink)]">
           GitHub
         </a>
-        <a href={profile.linkedin} target="_blank" rel="noopener" class="transition hover:text-[var(--color-accent)]">
+        <a href={profile.linkedin} target="_blank" rel="noopener" class="transition hover:text-[var(--color-ink)]">
           LinkedIn
         </a>
-        <a href={`mailto:${profile.email}`} class="transition hover:text-[var(--color-accent)]">
+        <a href={`mailto:${profile.email}`} class="transition hover:text-[var(--color-ink)]">
           Email
         </a>
       </div>

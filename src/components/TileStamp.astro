@@ -1,0 +1,16 @@
+---
+import Tile from './Tile.astro';
+import { makeTiles } from '../lib/tiles';
+
+interface Props {
+  seed: string;
+  class?: string;
+}
+
+const { seed, class: className = '' } = Astro.props;
+const tiles = makeTiles(seed, 4);
+---
+
+<span class={`tile-stamp ${className}`} aria-hidden="true">
+  {tiles.map((tile, i) => <Tile tile={tile} index={i} />)}
+</span>

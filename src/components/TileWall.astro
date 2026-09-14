@@ -1,0 +1,38 @@
+---
+import Tile from './Tile.astro';
+import { makeTiles } from '../lib/tiles';
+
+interface Props {
+  lang: 'pt' | 'en';
+}
+
+const { lang } = Astro.props;
+const tiles = makeTiles('brasilia', 16);
+
+const caption = {
+  pt: 'Azulejos à moda de Athos Bulcão. Clique para girar.',
+  en: 'Tiles in the manner of Athos Bulcão. Click to turn them.',
+}[lang];
+---
+
+<figure class="tile-wall-figure">
+  <div class="tile-wall" data-tile-wall aria-hidden="true">
+    {tiles.map((tile, i) => <Tile tile={tile} index={i} />)}
+  </div>
+  <figcaption class="mt-3 text-xs text-[var(--color-muted)]">{caption}</figcaption>
+</figure>
+
+<script data-astro-rerun is:inline>
+  function initTileWalls() {
+    document.querySelectorAll('[data-tile-wall] .tile').forEach(function (tile) {
+      // onclick (não addEventListener) para não empilhar handlers entre navegações do ClientRouter.
+      tile.onclick = function () {
+        var next = Number(tile.dataset.rotation || 0) + 90;
+        tile.dataset.rotation = String(next);
+        tile.style.setProperty('--r', next + 'deg');
+      };
+    });
+  }
+
+  initTileWalls();
+</script>

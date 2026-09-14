@@ -1,5 +1,6 @@
 ---
 import ThemeToggle from './ThemeToggle.astro';
+import TileStamp from './TileStamp.astro';
 import { profile } from '../data/profile';
 
 interface Props {
@@ -49,44 +50,35 @@ function otherLangHref(): string {
 const otherLangPath = otherLangHref();
 ---
 
-<header class="sticky top-0 z-40 border-b border-[var(--color-border)] bg-[var(--color-bg)]/80 backdrop-blur-md">
-  <nav class="mx-auto flex max-w-4xl items-center justify-between px-6 py-4">
-    <a href={basePath} class="font-serif text-lg font-semibold tracking-tight hover:text-[var(--color-accent)]">
-      {profile.name.split(' ')[0]} {profile.name.split(' ').slice(-1)}
+<header class="sticky top-0 z-40 border-b border-[var(--color-border)] bg-[var(--color-bg)]/85 backdrop-blur-md">
+  <nav class="mx-auto flex max-w-5xl items-center justify-between gap-3 px-6 py-3.5">
+    <a href={basePath} class="group flex items-center gap-2.5 hover:text-[var(--color-accent)]">
+      <TileStamp seed="nicolas-queiroz" class="w-7" />
+      <span class="heading hidden text-base sm:inline">
+        {profile.name.split(' ')[0]} {profile.name.split(' ').slice(-1)}
+      </span>
     </a>
-    <div class="flex items-center gap-1 sm:gap-2">
-      <ul class="flex items-center gap-1 text-sm font-medium sm:gap-2">
-        <li>
-          <a
-            href={basePath}
-            aria-current={isActive(basePath, true) ? 'page' : undefined}
-            class={`rounded-full px-3 py-1.5 transition ${isActive(basePath, true) ? 'bg-[var(--color-accent-soft)] text-[var(--color-accent)]' : 'text-[var(--color-ink-soft)] hover:text-[var(--color-accent)]'}`}
-          >
-            {t.home}
-          </a>
-        </li>
-        <li>
-          <a
-            href={blogPath}
-            aria-current={isActive(blogPath) ? 'page' : undefined}
-            class={`rounded-full px-3 py-1.5 transition ${isActive(blogPath) ? 'bg-[var(--color-accent-soft)] text-[var(--color-accent)]' : 'text-[var(--color-ink-soft)] hover:text-[var(--color-accent)]'}`}
-          >
-            {t.blog}
-          </a>
-        </li>
-        <li>
-          <a
-            href={aboutPath}
-            aria-current={isActive(aboutPath) ? 'page' : undefined}
-            class={`rounded-full px-3 py-1.5 transition ${isActive(aboutPath) ? 'bg-[var(--color-accent-soft)] text-[var(--color-accent)]' : 'text-[var(--color-ink-soft)] hover:text-[var(--color-accent)]'}`}
-          >
-            {t.about}
-          </a>
-        </li>
+    <div class="flex items-center gap-1 sm:gap-3">
+      <ul class="flex items-center text-sm font-medium">
+        {[
+          { href: basePath, label: t.home, active: isActive(basePath, true) },
+          { href: blogPath, label: t.blog, active: isActive(blogPath) },
+          { href: aboutPath, label: t.about, active: isActive(aboutPath) },
+        ].map((item) => (
+          <li>
+            <a
+              href={item.href}
+              aria-current={item.active ? 'page' : undefined}
+              class={`block px-2.5 py-2 transition sm:px-3 ${item.active ? 'text-[var(--color-ink)] shadow-[inset_0_-2px_0_var(--color-accent)]' : 'text-[var(--color-muted)] hover:text-[var(--color-ink)]'}`}
+            >
+              {item.label}
+            </a>
+          </li>
+        ))}
       </ul>
       <a
         href={otherLangPath}
-        class="rounded-full border border-[var(--color-border)] px-2.5 py-1 text-xs font-semibold uppercase text-[var(--color-ink-soft)] transition hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]"
+        class="rounded-md border border-[var(--color-border)] px-2 py-1 text-xs font-semibold text-[var(--color-ink-soft)] transition hover:border-[var(--color-accent)] hover:text-[var(--color-accent)]"
       >
         {t.otherLang}
       </a>

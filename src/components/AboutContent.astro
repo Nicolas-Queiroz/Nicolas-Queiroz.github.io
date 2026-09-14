@@ -1,4 +1,5 @@
 ---
+import TileStamp from './TileStamp.astro';
 import { profile } from '../data/profile';
 
 interface Props {
@@ -9,7 +10,7 @@ const { lang } = Astro.props;
 
 const t = {
   pt: {
-    kicker: 'Sobre mim',
+    phone: 'Telefone',
     skills: 'Habilidades',
     experience: 'Experiência',
     projects: 'Projetos',
@@ -26,7 +27,7 @@ const t = {
     },
   },
   en: {
-    kicker: 'About me',
+    phone: 'Phone',
     skills: 'Skills',
     experience: 'Experience',
     projects: 'Projects',
@@ -45,96 +46,120 @@ const t = {
 }[lang];
 ---
 
-<section class="mb-14">
-  <p class="text-xs font-semibold uppercase tracking-widest text-[var(--color-accent)]">{t.kicker}</p>
-  <h1 class="mt-2 font-serif text-4xl font-semibold tracking-tight text-[var(--color-ink)] md:text-5xl">
-    {profile.name}
-  </h1>
-  <p class="mt-2 text-xl text-[var(--color-accent)]">{profile.title[lang]}</p>
-  <p class="mt-1 text-sm text-[var(--color-muted)]">📍 {profile.location}</p>
-  <p class="mt-6 max-w-2xl text-lg leading-relaxed text-[var(--color-ink-soft)]">{profile.bio[lang]}</p>
+<section class="mb-20">
+  <h1 class="display text-[clamp(2.4rem,7vw,4rem)] text-[var(--color-ink)]">{profile.name}</h1>
+  <p class="heading mt-5 text-xl text-[var(--color-accent)] md:text-2xl">{profile.title[lang]}</p>
+  <p class="mt-1 text-sm text-[var(--color-muted)]">{profile.location}</p>
+  <p class="mt-8 max-w-2xl font-serif text-xl leading-relaxed text-[var(--color-ink-soft)]">{profile.bio[lang]}</p>
 </section>
 
-<section class="mb-14">
-  <h2 class="mb-4 font-serif text-xl font-semibold text-[var(--color-ink)]">{t.skills}</h2>
-  <div class="grid gap-5 md:grid-cols-2">
+<section class="mb-20">
+  <h2 class="heading mb-6 text-2xl text-[var(--color-ink)] md:text-3xl">{t.skills}</h2>
+  <dl class="border-b border-[var(--color-border)]">
     {Object.entries(profile.skills).map(([key, values]) => (
-      <div>
-        <h3 class="mb-2 text-xs font-semibold uppercase tracking-wide text-[var(--color-muted)]">
+      <div class="grid gap-2 border-t border-[var(--color-border)] py-4 sm:grid-cols-[11rem_minmax(0,1fr)] sm:gap-6">
+        <dt class="pt-0.5 text-sm text-[var(--color-muted)]">
           {t.langLabels[key as keyof typeof t.langLabels]}
-        </h3>
-        <div class="flex flex-wrap gap-2">
+        </dt>
+        <dd class="flex flex-wrap gap-2">
           {values.map((skill) => (
             <span class="chip">{skill}</span>
           ))}
-        </div>
+        </dd>
       </div>
     ))}
-  </div>
+  </dl>
 </section>
 
-<section class="mb-14">
-  <h2 class="mb-4 font-serif text-xl font-semibold text-[var(--color-ink)]">{t.experience}</h2>
-  {profile.experience.map((exp) => (
-    <article class="mb-5 rounded-2xl border border-[var(--color-border)] bg-[var(--color-card)] p-6">
-      <div class="mb-2 flex flex-wrap items-baseline justify-between gap-2">
-        <h3 class="text-lg font-semibold text-[var(--color-ink)]">{exp.role[lang]}</h3>
-        <span class="text-sm text-[var(--color-muted)]">{exp.period}</span>
-      </div>
-      <p class="mb-3 text-sm font-medium text-[var(--color-accent)]">{exp.company}</p>
-      <ul class="space-y-1.5 text-sm text-[var(--color-ink-soft)]">
-        {exp.bullets[lang].map((b) => (
-          <li class="flex gap-2">
-            <span class="text-[var(--color-accent)]">•</span>
-            <span>{b}</span>
-          </li>
-        ))}
-      </ul>
-    </article>
-  ))}
+<section class="mb-20">
+  <h2 class="heading mb-8 text-2xl text-[var(--color-ink)] md:text-3xl">{t.experience}</h2>
+  <ol class="relative ml-2 border-l-2 border-[var(--color-border)]">
+    {profile.experience.map((exp) => (
+      <li class="relative mb-12 pl-8 last:mb-0 sm:pl-10">
+        <span
+          class="absolute -left-[9px] top-1.5 h-4 w-4 rotate-45 rounded-[2px] bg-[var(--color-accent)] ring-4 ring-[var(--color-bg)]"
+          aria-hidden="true"
+        ></span>
+        <p class="text-sm text-[var(--color-muted)]">{exp.period}</p>
+        <h3 class="heading mt-1 text-xl text-[var(--color-ink)]">{exp.role[lang]}</h3>
+        <p class="mt-0.5 font-medium text-[var(--color-ink-soft)]">{exp.company}</p>
+        <ul class="mt-4 max-w-2xl space-y-2 text-[var(--color-ink-soft)]">
+          {exp.bullets[lang].map((b) => (
+            <li class="flex gap-3 leading-relaxed">
+              <span class="mt-[0.6em] h-1.5 w-1.5 shrink-0 rounded-full bg-[var(--color-muted)]" aria-hidden="true"></span>
+              <span>{b}</span>
+            </li>
+          ))}
+        </ul>
+      </li>
+    ))}
+  </ol>
 </section>
 
-<section class="mb-14">
-  <h2 class="mb-4 font-serif text-xl font-semibold text-[var(--color-ink)]">{t.projects}</h2>
+<section class="mb-20">
+  <h2 class="heading mb-6 text-2xl text-[var(--color-ink)] md:text-3xl">{t.projects}</h2>
   {profile.projects.map((p) => (
-    <article class="mb-4 rounded-2xl border border-[var(--color-border)] bg-[var(--color-card)] p-6">
-      <h3 class="mb-2 text-lg font-semibold text-[var(--color-ink)]">{p.name}</h3>
-      <p class="mb-3 text-sm text-[var(--color-ink-soft)]">{p.description[lang]}</p>
-      <div class="flex flex-wrap gap-2">
-        {p.tags.map((tag) => (
-          <span class="chip">{tag}</span>
-        ))}
+    <article class="mb-4 grid grid-cols-[3rem_minmax(0,1fr)] gap-4 rounded-md bg-[var(--color-card)] p-6 sm:grid-cols-[4.5rem_minmax(0,1fr)] sm:gap-7">
+      <TileStamp seed={p.name} class="mt-1" />
+      <div>
+        <h3 class="heading text-xl text-[var(--color-ink)]">{p.name}</h3>
+        <p class="mt-2 max-w-2xl leading-relaxed text-[var(--color-ink-soft)]">{p.description[lang]}</p>
+        <div class="mt-4 flex flex-wrap gap-2">
+          {p.tags.map((tag) => (
+            <span class="chip">{tag}</span>
+          ))}
+        </div>
       </div>
     </article>
   ))}
 </section>
 
-<section class="mb-14 grid gap-8 md:grid-cols-2">
+<section class="mb-20 grid gap-12 md:grid-cols-2">
   <div>
-    <h2 class="mb-3 font-serif text-xl font-semibold text-[var(--color-ink)]">{t.education}</h2>
+    <h2 class="heading mb-4 text-2xl text-[var(--color-ink)]">{t.education}</h2>
     <p class="font-medium text-[var(--color-ink)]">{profile.education.course[lang]}</p>
-    <p class="text-sm text-[var(--color-ink-soft)]">{profile.education.school[lang]}</p>
-    <p class="text-sm text-[var(--color-muted)]">{profile.education.period}</p>
+    <p class="text-[var(--color-ink-soft)]">{profile.education.school[lang]}</p>
+    <p class="mt-1 text-sm text-[var(--color-muted)]">{profile.education.period}</p>
   </div>
   <div>
-    <h2 class="mb-3 font-serif text-xl font-semibold text-[var(--color-ink)]">{t.languages}</h2>
-    <ul class="space-y-1 text-sm">
+    <h2 class="heading mb-4 text-2xl text-[var(--color-ink)]">{t.languages}</h2>
+    <dl class="space-y-1.5">
       {profile.languages[lang].map((l) => (
-        <li>
-          <span class="font-medium text-[var(--color-ink)]">{l.name}:</span>{' '}
-          <span class="text-[var(--color-ink-soft)]">{l.level}</span>
-        </li>
+        <div class="flex flex-wrap gap-x-3">
+          <dt class="font-medium text-[var(--color-ink)]">{l.name}</dt>
+          <dd class="text-[var(--color-ink-soft)]">{l.level}</dd>
+        </div>
       ))}
-    </ul>
+    </dl>
   </div>
 </section>
 
 <section>
-  <h2 class="mb-3 font-serif text-xl font-semibold text-[var(--color-ink)]">{t.contact}</h2>
-  <ul class="space-y-1.5 text-sm">
-    <li>📧 <a href={`mailto:${profile.email}`} class="text-[var(--color-accent)] hover:underline">{profile.email}</a></li>
-    <li>📱 {profile.phone}</li>
-    <li>💼 <a href={profile.linkedin} target="_blank" rel="noopener" class="text-[var(--color-accent)] hover:underline">LinkedIn</a></li>
-    <li>💻 <a href={profile.github} target="_blank" rel="noopener" class="text-[var(--color-accent)] hover:underline">GitHub</a></li>
-  </ul>
+  <h2 class="heading mb-6 text-2xl text-[var(--color-ink)] md:text-3xl">{t.contact}</h2>
+  <dl class="border-b border-[var(--color-border)]">
+    {[
+      { label: 'E-mail', value: profile.email, href: `mailto:${profile.email}` },
+      { label: t.phone, value: profile.phone },
+      { label: 'LinkedIn', value: profile.linkedin.replace(/^https:\/\/(www\.)?/, '').replace(/\/$/, ''), href: profile.linkedin, external: true },
+      { label: 'GitHub', value: profile.github.replace('https://', ''), href: profile.github, external: true },
+    ].map((item) => (
+      <div class="grid gap-1 border-t border-[var(--color-border)] py-4 sm:grid-cols-[11rem_minmax(0,1fr)] sm:gap-6">
+        <dt class="text-sm text-[var(--color-muted)]">{item.label}</dt>
+        <dd>
+          {item.href ? (
+            <a
+              href={item.href}
+              target={item.external ? '_blank' : undefined}
+              rel={item.external ? 'noopener' : undefined}
+              class="break-all font-medium text-[var(--color-ink)] underline decoration-[var(--color-accent)] decoration-2 underline-offset-4 hover:text-[var(--color-accent)]"
+            >
+              {item.value}
+            </a>
+          ) : (
+            <span class="text-[var(--color-ink)]">{item.value}</span>
+          )}
+        </dd>
+      </div>
+    ))}
+  </dl>
 </section>
