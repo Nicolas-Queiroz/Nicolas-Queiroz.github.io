@@ -26,9 +26,10 @@ const related = relatedPosts(post, posts);
 
 const postUrl = new URL(postHref(post), Astro.site ?? Astro.url).href;
 const linkedinText = linkedinPost(post, postUrl);
-// O compositor do LinkedIn aceita o texto via `text`. A capa não dá pra anexar por URL:
-// ela entra no card de preview do link, lido do og:image.
-const composeUrl = `https://www.linkedin.com/feed/?shareActive=true&text=${encodeURIComponent(linkedinText)}`;
+// O share-offsite anexa o link com o card de preview (capa via og:image), mas não aceita
+// texto. O compositor que aceita texto (`feed/?shareActive=true&text=`) não gera o card.
+// Então abrimos o share-offsite e deixamos o texto na área de transferência.
+const shareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(postUrl)}`;
 const png = coverPng(post);
 
 const t = {
@@ -38,7 +39,7 @@ const t = {
     copyLink: 'Copiar link',
     copied: 'Link copiado',
     publish: 'Publicar no LinkedIn',
-    publishHint: 'Abre o LinkedIn com o texto preenchido. A capa aparece no preview do link.',
+    publishHint: 'Abre o LinkedIn com o link e a capa. O texto já vai copiado, é só colar.',
     copyText: 'Copiar texto',
     textCopied: 'Texto copiado',
     download: 'Baixar a capa',
@@ -52,7 +53,7 @@ const t = {
     copyLink: 'Copy link',
     copied: 'Link copied',
     publish: 'Post on LinkedIn',
-    publishHint: 'Opens LinkedIn with the text filled in. The cover shows up in the link preview.',
+    publishHint: 'Opens LinkedIn with the link and cover. The text is already copied, just paste it.',
     copyText: 'Copy text',
     textCopied: 'Text copied',
     download: 'Download the cover',
@@ -137,7 +138,7 @@ const t = {
     <div>
       <pre class="linkedin-text" data-linkedin-text>{linkedinText}</pre>
       <div class="mt-4 flex flex-wrap gap-2">
-        <a href={composeUrl} target="_blank" rel="noopener" class="btn btn-primary gap-2" data-linkedin-compose>
+        <a href={shareUrl} target="_blank" rel="noopener" class="btn btn-primary gap-2" data-linkedin-compose>
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-4 w-4" aria-hidden="true">
             <path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28ZM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13ZM7.12 20.45H3.56V9h3.56v11.45ZM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0Z"></path>
           </svg>
@@ -160,7 +161,7 @@ const t = {
 </section>
 
 <script data-astro-rerun is:inline>
-  // Também copia o texto ao abrir o LinkedIn: se o compositor vier vazio, é só colar.
+  // Copia o texto ao abrir o LinkedIn: o share-offsite não aceita texto, então é só colar.
   document.querySelectorAll('[data-linkedin-compose]').forEach(function (link) {
     link.onclick = function () {
       var source = document.querySelector('[data-linkedin-text]');
