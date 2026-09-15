@@ -3,6 +3,7 @@ import ThemeToggle from './ThemeToggle.astro';
 import TileStamp from './TileStamp.astro';
 import CommandPalette from './CommandPalette.astro';
 import { profile } from '../data/profile';
+import { otherLangHref, resumeHref } from '../lib/routes';
 
 interface Props {
   lang: 'pt' | 'en';
@@ -12,13 +13,15 @@ const { lang } = Astro.props;
 
 const labels = {
   pt: {
-    home: 'Currículo',
+    home: 'Início',
+    about: 'Sobre',
     blog: 'Blog',
     contact: 'Contato',
     otherLang: 'EN',
   },
   en: {
-    home: 'Resume',
+    home: 'Home',
+    about: 'About',
     blog: 'Blog',
     contact: 'Contact',
     otherLang: 'PT',
@@ -28,6 +31,7 @@ const labels = {
 const t = labels[lang];
 const basePath = `/${lang}`;
 const blogPath = `/${lang}/blog`;
+const aboutPath = resumeHref(lang);
 
 const path = new URL(Astro.request.url).pathname.replace(/\/$/, '') || '/';
 // Home só fica ativo em match exato — senão "/pt" (prefixo de tudo) ficaria
@@ -37,16 +41,7 @@ const isActive = (href: string, exact = false) => {
   return exact ? path === clean : path === clean || path.startsWith(`${clean}/`);
 };
 
-// Preserva a seção atual ao trocar de idioma (a página exata pode não existir
-// no outro idioma, ex.: slugs de posts diferem, então cai no índice da seção).
-function otherLangHref(): string {
-  const other = lang === 'pt' ? 'en' : 'pt';
-  if (path === basePath) return `/${other}`;
-  if (path.startsWith(blogPath)) return `/${other}/blog`;
-  return `/${other}`;
-}
-
-const otherLangPath = otherLangHref();
+const otherLangPath = otherLangHref(lang, path);
 ---
 
 <header class="sticky top-0 z-40 border-b border-[var(--color-border)] bg-[var(--color-bg)]/85 backdrop-blur-md">
@@ -61,6 +56,7 @@ const otherLangPath = otherLangHref();
       <ul class="flex items-center text-sm font-medium">
         {[
           { href: basePath, label: t.home, active: isActive(basePath, true) },
+          { href: aboutPath, label: t.about, active: isActive(aboutPath) },
           { href: blogPath, label: t.blog, active: isActive(blogPath) },
           { href: `${basePath}/#contato`, label: t.contact, active: false, hideOnMobile: true },
         ].map((item) => (

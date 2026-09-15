@@ -5,6 +5,14 @@ pubDate: 2026-09-13
 tags: ["AI", "Backend", "Cloud"]
 lang: "pt"
 image: "/posts-images/2026-09-13-agentes-codificacao-orcamento.svg"
+linkedin: |
+  Quase um terço das empresas ouvidas pela McKinsey desistiu de comprar algum software porque conseguiu construir a mesma coisa internamente, com agentes de codificação.
+
+  Eu já vivo o lado "construir" dessa conta. Sou o único desenvolvedor responsável por projetos completos numa rede com mais de 90 lojas, e o programa de fidelidade que fiz em Odoo não nasceu por falta de opção no mercado. Nasceu porque controle total da arquitetura valia mais que contrato de terceiro.
+
+  O que o agente muda não é a decisão, é o preço dela: funcionalidade de semanas vira projeto de dias.
+
+  Fiquei com uma dúvida honesta. Quantas dessas decisões foram "não vale mais a assinatura" e quantas foram "o fornecedor nunca fez exatamente o que a gente precisava"?
 ---
 
 Isso não me surpreende nem um pouco, e acho que é exatamente por isso que vale parar pra pensar. A McKinsey fez um levantamento e descobriu que quase um terço das organizações pesquisadas decidiu não comprar pelo menos um produto ou funcionalidade de software porque conseguiu construir a mesma coisa internamente usando agentes de codificação com IA.

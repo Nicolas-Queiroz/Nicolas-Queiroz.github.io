@@ -2,7 +2,7 @@
   "name": "nicolas-queiroz-portfolio",
   "type": "module",
   "version": "1.3.0",
-  "description": "Portfolio pessoal com feed de notícias curado por agente de IA",
+  "description": "Portfolio pessoal com feed de not\u00edcias curado por agente de IA",
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
@@ -15,6 +15,7 @@
     "@astrojs/sitemap": "^3.2.1",
     "@tailwindcss/vite": "^4.0.0",
     "astro": "^5.1.1",
+    "sharp": "^0.34.5",
     "tailwindcss": "^4.0.0"
   }
 }

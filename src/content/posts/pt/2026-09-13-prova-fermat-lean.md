@@ -5,6 +5,14 @@ pubDate: 2026-09-13
 tags: ["AI", "LLMs", "MCP"]
 lang: "pt"
 image: "/posts-images/2026-09-13-prova-fermat-lean.svg"
+linkedin: |
+  Uma IA levou 11 dias para traduzir uma prova do Último Teorema de Fermat para Lean e sair do outro lado com o resultado verificado por computador. Para mim o que muda não é "a IA sabe matemática". É a régua do que a gente chama de verificado.
+
+  Eu repito bastante que fluxo bom é fluxo configurável, documentado e coberto por teste. Só que teste é amostragem: eu cubro os casos que consigo imaginar e sobra sempre o "e o caso que eu não pensei?". Prova formal não tem esse buraco.
+
+  Ninguém vai provar formalmente o sistema inteiro. Mas a regra que calcula desconto, talvez.
+
+  Alguém já aplicou verificação formal em regra de negócio de verdade, fora da academia?
 ---
 
 Fico pensando no seguinte: se uma IA leva 11 dias pra traduzir uma prova inteira do Último Teorema de Fermat pra Lean e sair do outro lado com um resultado verificado por computador, o que muda de verdade não é só "a IA sabe matemática". É a régua do que a gente chama de verificado.

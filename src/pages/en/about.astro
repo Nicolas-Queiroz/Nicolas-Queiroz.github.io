@@ -1,4 +1,8 @@
 ---
-// The resume now lives on the home page; keeps the old link working.
-return Astro.redirect('/en/');
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ResumeContent from '../../components/ResumeContent.astro';
 ---
+
+<BaseLayout lang="en" title="Resume">
+  <ResumeContent lang="en" />
+</BaseLayout>

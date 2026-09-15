@@ -1,4 +1,8 @@
 ---
-// O currículo agora é a página inicial; mantém o link antigo funcionando.
-return Astro.redirect('/pt/');
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import ResumeContent from '../../components/ResumeContent.astro';
 ---
+
+<BaseLayout lang="pt" title="Currículo">
+  <ResumeContent lang="pt" />
+</BaseLayout>

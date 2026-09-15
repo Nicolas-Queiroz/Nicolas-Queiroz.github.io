@@ -2,7 +2,7 @@
 import { render } from 'astro:content';
 import BaseLayout from '../../../layouts/BaseLayout.astro';
 import PostPage from '../../../components/PostPage.astro';
-import { getPosts, postSlug } from '../../../lib/posts';
+import { coverPng, getPosts, postSlug } from '../../../lib/posts';
 
 export async function getStaticPaths() {
   const posts = await getPosts('pt');
@@ -16,7 +16,7 @@ const { post, posts } = Astro.props;
 const { Content } = await render(post);
 ---
 
-<BaseLayout lang="pt" title={post.data.title} description={post.data.description}>
+<BaseLayout lang="pt" title={post.data.title} description={post.data.description} image={coverPng(post)} type="article">
   <PostPage post={post} posts={posts}>
     <Content />
   </PostPage>

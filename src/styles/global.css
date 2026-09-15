@@ -544,6 +544,21 @@ button.skill-chip:hover {
   color: var(--color-accent);
 }
 
+/* Texto pronto do post do LinkedIn: preserva as quebras de linha como serão
+   coladas lá, sem virar bloco de código. */
+.linkedin-text {
+  white-space: pre-wrap;
+  font-family: var(--font-sans);
+  font-size: 0.95rem;
+  line-height: 1.65;
+  color: var(--color-ink-soft);
+  background: var(--color-bg-soft);
+  border: 1px solid var(--color-border);
+  border-radius: 6px;
+  padding: 1rem 1.1rem;
+  overflow-wrap: anywhere;
+}
+
 /* ---- Article / long-form typography ----------------------------------- */
 
 .prose-post {

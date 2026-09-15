@@ -7,7 +7,7 @@ Portfolio pessoal bilíngue (PT/EN) construído com Astro 5 + Tailwind CSS 4, ho
 ```
 Nicolas-Queiroz.github.io/
 ├── src/
-│   ├── components/       # Header, Footer, HomeContent
+│   ├── components/       # Header, Footer, HomeContent, ResumeContent, PostPage
 │   ├── layouts/          # BaseLayout
 │   ├── pages/
 │   │   ├── pt/           # rotas em português
@@ -128,10 +128,11 @@ Este é o passo mais importante para qualidade:
 1. Puxe as mudanças localmente: `git pull`
 2. Abra os arquivos em `drafts/pt/` e `drafts/en/`
 3. Leia — o Gemini escreve bem, mas às vezes precisa de ajustes
-4. Se aprovar: **mova** os arquivos de `drafts/pt/` para `src/content/posts/pt/` (e o EN para `src/content/posts/en/`)
-5. Delete os posts de exemplo (`2026-09-04-exemplo.md` e `2026-09-04-example.md`)
-6. `git add`, `git commit -m "post: <título>"`, `git push`
-7. O `deploy.yml` roda sozinho e em ~2 minutos o post está no ar.
+4. Confira também o campo `linkedin` do frontmatter: é o texto que vai aparecer pronto para copiar na página do post
+5. Se aprovar: **mova** os arquivos de `drafts/pt/` para `src/content/posts/pt/` (e o EN para `src/content/posts/en/`)
+6. Delete os posts de exemplo (`2026-09-04-exemplo.md` e `2026-09-04-example.md`)
+7. `git add`, `git commit -m "post: <título>"`, `git push`
+8. O `deploy.yml` roda sozinho e em ~2 minutos o post está no ar.
 
 ### 9. Deixe rolar
 
@@ -158,6 +159,18 @@ Se um dia quiser confiar 100% no bot, edite `scripts/gerar_post.py` na função 
 ### Mudar cores
 
 Edite as variáveis CSS em `src/styles/global.css` (bloco `@theme`).
+
+## Publicar um post no LinkedIn
+
+No fim de cada post existe um bloco **Publicar no LinkedIn** com tudo pronto:
+
+- o texto (gancho do frontmatter + link do post + hashtags das tags), num botão de copiar;
+- a capa em PNG 1200x630, num botão de baixar, caso você queira anexar a imagem à mão;
+- um atalho para abrir o compartilhamento do LinkedIn já com o link.
+
+O preview de link do LinkedIn usa esse mesmo PNG (`og:image`), gerado no build a
+partir do SVG da capa. Não precisa versionar imagem nenhuma: basta criar o
+`.svg` em `public/posts-images/`.
 
 ## Custos
 

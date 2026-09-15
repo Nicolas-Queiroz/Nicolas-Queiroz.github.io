@@ -2,6 +2,9 @@
 dist/
 .astro/
 
+# capas rasterizadas para og:image (geradas no build a partir dos .svg)
+public/posts-images/*.png
+
 # dependencies
 node_modules/
 

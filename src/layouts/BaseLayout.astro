@@ -9,15 +9,20 @@ interface Props {
   title?: string;
   description?: string;
   lang: 'pt' | 'en';
+  /** Caminho da capa em raster (og:image). SVG não vale: o LinkedIn ignora. */
+  image?: string;
+  type?: 'website' | 'article';
 }
 
-const { title, description, lang } = Astro.props;
+const { title, description, lang, image, type = 'website' } = Astro.props;
 
 const pageTitle = title
   ? `${title} • ${profile.name}`
   : `${profile.name} • ${profile.title[lang]}`;
 
 const pageDescription = description ?? profile.bio[lang];
+// og:image precisa de URL absoluta.
+const imageUrl = image ? new URL(image, Astro.site ?? Astro.url).href : undefined;
 ---
 
 <!doctype html>
@@ -35,10 +40,20 @@ const pageDescription = description ?? profile.bio[lang];
     <meta http-equiv="Cache-Control" content="no-cache" />
 
     <!-- Open Graph -->
-    <meta property="og:type" content="website" />
+    <meta property="og:type" content={type} />
     <meta property="og:title" content={pageTitle} />
     <meta property="og:description" content={pageDescription} />
     <meta property="og:url" content={Astro.url} />
+    <meta property="og:locale" content={lang === 'pt' ? 'pt_BR' : 'en_US'} />
+    {imageUrl && (
+      <Fragment>
+        <meta property="og:image" content={imageUrl} />
+        <meta property="og:image:width" content="1200" />
+        <meta property="og:image:height" content="630" />
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:image" content={imageUrl} />
+      </Fragment>
+    )}
 
     <!-- Fontes -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />

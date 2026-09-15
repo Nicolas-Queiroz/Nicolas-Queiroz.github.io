@@ -1,0 +1,66 @@
+---
+// Seção de contato da página inicial. O link "Contato" do menu aponta pra ela.
+import CopyButton from './CopyButton.astro';
+import { profile } from '../data/profile';
+import type { Lang } from '../lib/posts';
+
+interface Props {
+  lang: Lang;
+}
+
+const { lang } = Astro.props;
+
+const t = {
+  pt: {
+    contact: 'Contato',
+    intro: 'O jeito mais rápido de falar comigo é por e-mail.',
+    copyEmail: 'Copiar e-mail',
+    copied: 'E-mail copiado',
+    phone: 'Telefone',
+    location: 'Localização',
+  },
+  en: {
+    contact: 'Contact',
+    intro: 'Email is the fastest way to reach me.',
+    copyEmail: 'Copy email',
+    copied: 'Email copied',
+    phone: 'Phone',
+    location: 'Location',
+  },
+}[lang];
+
+const linkedinHandle = profile.linkedin.replace(/^https:\/\/(www\.)?/, '').replace(/\/$/, '');
+const githubHandle = profile.github.replace('https://', '');
+---
+
+<section id="contato" class="scroll-mt-24">
+  <h2 class="display text-[clamp(2.2rem,6vw,3.5rem)] text-[var(--color-ink)]">{t.contact}</h2>
+  <p class="mt-4 text-lg text-[var(--color-ink-soft)]">{t.intro}</p>
+  <dl class="mt-8 border-b border-[var(--color-border)]">
+    <div class="grid items-center gap-2 border-t border-[var(--color-border)] py-4 sm:grid-cols-[11rem_minmax(0,1fr)_auto] sm:gap-6">
+      <dt class="text-sm text-[var(--color-muted)]">E-mail</dt>
+      <dd>
+        <a href={`mailto:${profile.email}`} class="contact-link">{profile.email}</a>
+      </dd>
+      <dd>
+        <CopyButton value={profile.email} label={t.copyEmail} copiedLabel={t.copied} class="btn btn-ghost gap-2 py-2 text-sm" />
+      </dd>
+    </div>
+    <div class="grid gap-2 border-t border-[var(--color-border)] py-4 sm:grid-cols-[11rem_minmax(0,1fr)] sm:gap-6">
+      <dt class="text-sm text-[var(--color-muted)]">{t.phone}</dt>
+      <dd class="text-[var(--color-ink)]">{profile.phone}</dd>
+    </div>
+    <div class="grid gap-2 border-t border-[var(--color-border)] py-4 sm:grid-cols-[11rem_minmax(0,1fr)] sm:gap-6">
+      <dt class="text-sm text-[var(--color-muted)]">{t.location}</dt>
+      <dd class="text-[var(--color-ink)]">{profile.location}</dd>
+    </div>
+    <div class="grid gap-2 border-t border-[var(--color-border)] py-4 sm:grid-cols-[11rem_minmax(0,1fr)] sm:gap-6">
+      <dt class="text-sm text-[var(--color-muted)]">LinkedIn</dt>
+      <dd><a href={profile.linkedin} target="_blank" rel="noopener" class="contact-link">{linkedinHandle}</a></dd>
+    </div>
+    <div class="grid gap-2 border-t border-[var(--color-border)] py-4 sm:grid-cols-[11rem_minmax(0,1fr)] sm:gap-6">
+      <dt class="text-sm text-[var(--color-muted)]">GitHub</dt>
+      <dd><a href={profile.github} target="_blank" rel="noopener" class="contact-link">{githubHandle}</a></dd>
+    </div>
+  </dl>
+</section>

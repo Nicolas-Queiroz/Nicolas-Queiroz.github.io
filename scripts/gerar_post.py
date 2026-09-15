@@ -5,7 +5,7 @@ Fluxo:
 1. Busca notícias recentes na Currents API filtrando por keywords do perfil.
 2. Descarta as que já viraram post (compara URLs em posts existentes).
 3. Escolhe a mais recente que sobrou.
-4. Gera post original em PT e EN via Gemini.
+4. Gera post original em PT e EN via Gemini, junto do gancho para o LinkedIn.
 5. Salva em drafts/pt/ e drafts/en/ para revisão manual.
 
 Para publicar, mova o arquivo de drafts/{lang}/ para src/content/posts/{lang}/.
@@ -156,25 +156,32 @@ Tarefa: escreva um post em {idioma} de 300-450 palavras sobre esta notícia. Req
 3. Quando fizer sentido, conecte com desenvolvimento backend, Python, Django, Odoo, cloud ou IA.
 4. Seja direto, sem enrolação. Evite frases genéricas de abertura tipo "No mundo tecnológico de hoje...".
 5. NÃO inclua o título no corpo (será separado). NÃO inclua frontmatter.
-6. Retorne APENAS o markdown do corpo do post.
+6. Nunca use travessão (—) para intercalar ideias. Use ponto, vírgula, dois-pontos ou parênteses.
+7. Sem emoji.
+8. Retorne APENAS o markdown do corpo do post.
 
 Também gere no final, em uma linha JSON, os seguintes campos (sem markdown, sem cerca):
-{{"titulo_post": "...", "descricao_curta": "..."}}
+{{"titulo_post": "...", "descricao_curta": "...", "post_linkedin": "..."}}
 
 Onde:
 - titulo_post: um título original em {idioma} (não copie o original), 8-12 palavras.
 - descricao_curta: resumo em 1 frase, até 160 caracteres.
+- post_linkedin: o texto do post do LinkedIn em {idioma}, 60-120 palavras, em
+  primeira pessoa, abrindo com a opinião ou a constatação mais forte do post e
+  fechando com uma pergunta honesta para quem lê. Sem emoji, sem hashtag, sem
+  travessão e sem link (o link e as hashtags são adicionados depois). Separe os
+  parágrafos com \\n\\n.
 
 Estrutura da resposta:
 CORPO_DO_POST
 
 ---METADATA---
-{{"titulo_post": "...", "descricao_curta": "..."}}
+{{"titulo_post": "...", "descricao_curta": "...", "post_linkedin": "..."}}
 """
 
 
-def parse_gemini_output(text: str) -> tuple[str, str, str]:
-    """Extrai (corpo_markdown, titulo, descricao) da resposta do Gemini."""
+def parse_gemini_output(text: str) -> tuple[str, str, str, str]:
+    """Extrai (corpo_markdown, titulo, descricao, post_linkedin) da resposta."""
     if "---METADATA---" in text:
         body, meta_raw = text.split("---METADATA---", 1)
     else:
@@ -200,11 +207,13 @@ def parse_gemini_output(text: str) -> tuple[str, str, str]:
         meta = json.loads(meta_raw)
         titulo = meta.get("titulo_post", "").strip()
         descricao = meta.get("descricao_curta", "").strip()
+        linkedin = meta.get("post_linkedin", "").strip()
     except json.JSONDecodeError:
         titulo = ""
         descricao = ""
+        linkedin = ""
 
-    return body, titulo, descricao
+    return body, titulo, descricao, linkedin
 
 
 def guess_tags(article: dict) -> list[str]:
@@ -241,6 +250,7 @@ def write_draft(
     source_url: str,
     source_name: str,
     tags: list[str],
+    linkedin: str = "",
 ) -> Path:
     """Escreve o arquivo markdown do post na pasta drafts/{lang}/."""
     today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
@@ -266,8 +276,17 @@ def write_draft(
         f'lang: "{lang}"\n'
         f"source: {source_url}\n"
         f'sourceName: "{safe_source_name}"\n'
-        f"---\n\n"
     )
+
+    # Gancho do post do LinkedIn como bloco YAML literal: preserva as quebras
+    # de parágrafo sem precisar escapar aspas.
+    if linkedin:
+        indented = "\n".join(
+            f"  {line}" if line.strip() else "" for line in linkedin.splitlines()
+        )
+        frontmatter += f"linkedin: |\n{indented}\n"
+
+    frontmatter += "---\n\n"
 
     dest.write_text(frontmatter + body + "\n", encoding="utf-8")
     return dest
@@ -314,7 +333,7 @@ def main() -> int:
             print(f"❌ Falha no Gemini ({lang}): {e}", file=sys.stderr)
             return 1
 
-        body, title, description = parse_gemini_output(raw)
+        body, title, description, linkedin = parse_gemini_output(raw)
 
         if not title:
             title = article.get("title", "Sem título")
@@ -329,10 +348,14 @@ def main() -> int:
             source_url=source_url,
             source_name=source_name,
             tags=tags,
+            linkedin=linkedin,
         )
         print(f"   → salvo em {dest.relative_to(REPO_ROOT)}", flush=True)
 
-    print("✨ Concluído. Revise os arquivos em drafts/ e mova para src/content/posts/ quando aprovar.")
+    print(
+        "✨ Concluído. Revise os arquivos em drafts/ (inclusive o campo linkedin) "
+        "e mova para src/content/posts/ quando aprovar."
+    )
     return 0
 
 

@@ -5,6 +5,14 @@ pubDate: 2026-09-13
 tags: ["Cloud", "AI", "Backend"]
 lang: "en"
 image: "/posts-images/2026-09-13-cloudflare-bloqueia-bots-ia.svg"
+linkedin: |
+  Starting September 15, every new domain on Cloudflare blocks AI training crawlers by default on ad-supported pages, while still letting search bots through.
+
+  It says something that the answer to "my content became training data" turned into a CDN setting instead of a contract. Working with GCP taught me that separating who may read from who may process usually pays off in the infrastructure layer: easier to audit, and nobody forgets to apply it to the new endpoint.
+
+  The ironic part is that this blog has posts drafted by an agent I built myself. The difference is who gets to decide.
+
+  How many site owners will know the option exists, and how many will just inherit the default?
 ---
 
 I find it telling that the fix for "your content is being scraped to train a model without permission" ended up being an infrastructure setting instead of a contractual issue. Starting September 15, 2026, every new domain on Cloudflare will automatically block "Agent" and "Training" AI crawlers on ad-supported pages, while still letting search bots through. That gives site owners much more granular control over who gets to scrape their content, but the fact that this had to become a CDN default says a lot about how this was never actually solved at any other level.

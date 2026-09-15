@@ -5,7 +5,15 @@ import BackButton from './BackButton.astro';
 import CopyButton from './CopyButton.astro';
 import PostCover from './PostCover.astro';
 import ReadingProgress from './ReadingProgress.astro';
-import { formatDate, readingLabel, relatedPosts, type Post } from '../lib/posts';
+import {
+  coverPng,
+  formatDate,
+  linkedinPost,
+  postHref,
+  readingLabel,
+  relatedPosts,
+  type Post,
+} from '../lib/posts';
 
 interface Props {
   post: Post;
@@ -15,7 +23,11 @@ interface Props {
 const { post, posts } = Astro.props;
 const lang = post.data.lang;
 const related = relatedPosts(post, posts);
-const shareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(Astro.url.href)}`;
+
+const postUrl = new URL(postHref(post), Astro.site ?? Astro.url).href;
+const shareUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(postUrl)}`;
+const linkedinText = linkedinPost(post, postUrl);
+const png = coverPng(post);
 
 const t = {
   pt: {
@@ -23,7 +35,12 @@ const t = {
     share: 'Compartilhar',
     copyLink: 'Copiar link',
     copied: 'Link copiado',
-    linkedin: 'Postar no LinkedIn',
+    publish: 'Publicar no LinkedIn',
+    publishHint: 'Texto e capa prontos para colar.',
+    copyText: 'Copiar texto',
+    textCopied: 'Texto copiado',
+    download: 'Baixar a capa',
+    openLinkedin: 'Abrir o LinkedIn',
     source: 'Fonte original',
     keepReading: 'Continue lendo',
     back: 'Voltar para o blog',
@@ -33,7 +50,12 @@ const t = {
     share: 'Share',
     copyLink: 'Copy link',
     copied: 'Link copied',
-    linkedin: 'Post on LinkedIn',
+    publish: 'Post on LinkedIn',
+    publishHint: 'Text and cover ready to paste.',
+    copyText: 'Copy text',
+    textCopied: 'Text copied',
+    download: 'Download the cover',
+    openLinkedin: 'Open LinkedIn',
     source: 'Original source',
     keepReading: 'Keep reading',
     back: 'Back to blog',
@@ -76,11 +98,11 @@ const t = {
       <h2 class="text-sm text-[var(--color-muted)]">{t.share}</h2>
       <div class="mt-3 flex flex-wrap gap-2 lg:flex-col">
         <CopyButton label={t.copyLink} copiedLabel={t.copied} class="btn btn-ghost gap-2" />
-        <a href={shareUrl} target="_blank" rel="noopener" class="btn btn-ghost gap-2">
+        <a href="#linkedin" class="btn btn-ghost gap-2">
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-4 w-4" aria-hidden="true">
             <path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28ZM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13ZM7.12 20.45H3.56V9h3.56v11.45ZM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0Z"></path>
           </svg>
-          {t.linkedin}
+          LinkedIn
         </a>
       </div>
       {post.data.source && (
@@ -94,6 +116,48 @@ const t = {
     </aside>
   </div>
 </article>
+
+<section id="linkedin" class="mt-20 scroll-mt-24">
+  <div class="flex flex-wrap items-baseline justify-between gap-x-6 gap-y-1">
+    <h2 class="heading text-xl text-[var(--color-ink)] md:text-2xl">{t.publish}</h2>
+    <p class="text-sm text-[var(--color-muted)]">{t.publishHint}</p>
+  </div>
+
+  <div class="mt-5 grid gap-6 rounded-md border border-[var(--color-border)] bg-[var(--color-card)] p-5 md:grid-cols-[minmax(0,16rem)_minmax(0,1fr)] md:p-6">
+    {png && (
+      <img
+        src={png}
+        alt=""
+        width="1200"
+        height="630"
+        loading="lazy"
+        class="w-full self-start rounded-md border border-[var(--color-border)]"
+      />
+    )}
+    <div>
+      <pre class="linkedin-text" data-linkedin-text>{linkedinText}</pre>
+      <div class="mt-4 flex flex-wrap gap-2">
+        <CopyButton from="[data-linkedin-text]" label={t.copyText} copiedLabel={t.textCopied} class="btn btn-primary gap-2" />
+        {png && (
+          <a href={png} download class="btn btn-ghost gap-2">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4" aria-hidden="true">
+              <path d="M12 3v12"></path>
+              <path d="m7 12 5 5 5-5"></path>
+              <path d="M4 21h16"></path>
+            </svg>
+            {t.download}
+          </a>
+        )}
+        <a href={shareUrl} target="_blank" rel="noopener" class="btn btn-ghost gap-2">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-4 w-4" aria-hidden="true">
+            <path d="M20.45 20.45h-3.56v-5.57c0-1.33-.02-3.04-1.85-3.04-1.85 0-2.14 1.45-2.14 2.94v5.67H9.35V9h3.41v1.56h.05c.48-.9 1.64-1.85 3.37-1.85 3.6 0 4.27 2.37 4.27 5.46v6.28ZM5.34 7.43a2.06 2.06 0 1 1 0-4.13 2.06 2.06 0 0 1 0 4.13ZM7.12 20.45H3.56V9h3.56v11.45ZM22.22 0H1.77C.79 0 0 .77 0 1.73v20.54C0 23.23.79 24 1.77 24h20.45c.98 0 1.78-.77 1.78-1.73V1.73C24 .77 23.2 0 22.22 0Z"></path>
+          </svg>
+          {t.openLinkedin}
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
 
 {related.length > 0 && (
   <section class="mt-24 border-t border-[var(--color-border)] pt-12">

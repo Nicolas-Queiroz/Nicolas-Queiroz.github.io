@@ -37,6 +37,7 @@ Isso gera rascunhos em `drafts/pt/` e `drafts/en/` — nunca publica direto.
 - Posts publicados: `src/content/posts/pt/` e `src/content/posts/en/`
 - Rascunhos do bot (pré-revisão): `drafts/pt/` e `drafts/en/`
 - Capas: ilustrações SVG em `public/posts-images/` (ver "Como criar a capa do post"). `src/components/PostCover.astro` inlina o SVG para herdar as cores do tema; sem `image`, cai numa placa de circuito gerada
+- O build converte cada capa SVG num PNG 1200x630 ao lado dela (`src/integrations/og-images.mjs`, usando `sharp`). Os PNGs são gerados, ignorados pelo git, e servem só ao `og:image` e ao botão de baixar a capa, porque LinkedIn, WhatsApp e X não renderizam SVG no preview de link
 - Dados pessoais (bio, skills, experiência): `src/data/profile.ts`
 
 Schema do frontmatter (`src/content.config.ts`):
@@ -49,10 +50,15 @@ tags: string[]          # opcional, default []
 source: string (URL)    # opcional
 sourceName: string      # opcional
 image: string           # esperado: "/posts-images/AAAA-MM-DD-slug-pt.svg" (mesmo arquivo no PT e no EN)
+linkedin: string        # opcional, bloco YAML `|`: gancho do post do LinkedIn (ver seção abaixo)
 ```
 
-Página inicial (`/pt/`, `/en/`) é o currículo: `src/components/ResumeContent.astro`.
-`/pt/sobre` e `/en/about` só redirecionam para ela.
+Página inicial (`/pt/`, `/en/`) é a apresentação: `src/components/HomeContent.astro`
+(hero + puzzle, bloco "Agora", últimos posts e `ContactSection.astro`).
+O currículo completo mora em `/pt/sobre` e `/en/about`, via
+`src/components/ResumeContent.astro` (stack, experiência, projetos, formação,
+idiomas). Os slugs por idioma saem de `src/lib/routes.ts`, que também resolve
+o link PT/EN do cabeçalho.
 Rotas dinâmicas dos posts: `src/pages/{pt,en}/blog/[...slug].astro`, que
 delegam para `src/components/PostPage.astro`. Listagens em
 `src/pages/{pt,en}/blog/index.astro`, via `src/components/BlogIndex.astro`.
@@ -112,6 +118,25 @@ portaria na nuvem barrando crawlers). Use as capas existentes em
 - Precisa funcionar como miniatura de ~360px: poucos detalhes minúsculos, nada cortado nas bordas
 - Animação sutil: 2–3 loops CSS (transform/opacity), 3–8s, sem SMIL; elementos animados com a classe `<prefixo>-anim` e `@media (prefers-reduced-motion: reduce) { .<prefixo>-anim { animation: none !important; } }`
 - Revisar renderizando nos temas claro e escuro antes de publicar
+
+## Como preparar a publicação no LinkedIn
+
+Cada post renderiza um bloco "Publicar no LinkedIn" no fim da página, com a
+capa em PNG, o texto pronto e botões de copiar, baixar e abrir o LinkedIn. O
+texto é montado em `linkedinPost()` (`src/lib/posts.ts`) juntando três partes:
+
+1. o campo `linkedin` do frontmatter (ou, quando ele não existe, título +
+   descrição como fallback);
+2. a URL absoluta do post;
+3. as hashtags derivadas de `tags`.
+
+Então no frontmatter vai só o gancho, nunca o link nem as hashtags. Regras do
+gancho: 60 a 120 palavras, primeira pessoa, abre com a opinião ou constatação
+mais forte do post, fecha com pergunta honesta, sem emoji, sem hashtag e sem
+travessão. Mesmas regras de voz dos posts. A versão EN é reescrita nativa.
+
+O bot já gera esse campo nos rascunhos (`post_linkedin` no prompt do Gemini),
+para ser revisado junto com o post.
 
 ## Anti-padrões (evitar sempre)
 

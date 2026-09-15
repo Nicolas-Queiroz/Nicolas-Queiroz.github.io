@@ -5,6 +5,14 @@ pubDate: 2026-09-13
 tags: ["AI", "LLMs", "MCP"]
 lang: "en"
 image: "/posts-images/2026-09-13-prova-fermat-lean.svg"
+linkedin: |
+  An AI spent 11 days translating a proof of Fermat's Last Theorem into Lean and came out the other side machine-verified. What changes for me is not "the AI knows math". It is where we set the bar for the word verified.
+
+  I say often that a good workflow is configurable, documented and covered by tests. But testing is sampling: I cover the cases I can imagine, and the question "what about the one I did not think of?" never goes away. A formal proof does not leave that gap.
+
+  Nobody is going to formally verify a whole system. The rule that calculates a discount, though, maybe.
+
+  Has anyone applied formal verification to real business rules outside academia?
 ---
 
 Here's what keeps nagging me: if it takes an AI 11 days to translate an entire proof of Fermat's Last Theorem into Lean and come out the other side with something a computer fully verifies, the real shift isn't "the AI understands math." It's the bar we use for the word verified.

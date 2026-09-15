@@ -5,6 +5,14 @@ pubDate: 2026-09-13
 tags: ["AI", "MCP", "APIs"]
 lang: "en"
 image: "/posts-images/2026-09-13-alem-do-chatbox.svg"
+linkedin: |
+  A generic chat box is almost always the worst possible interface for an agent that takes real action in your system.
+
+  I read the "Beyond the Chatbox" framework, which argues for visible reasoning, human approval checkpoints and task-specific screens. I got there out of necessity rather than from a manifesto: my MCP code review agent is only useful because I know which module it is looking at and I have a clear approval point before anything becomes a real change.
+
+  A text box is cheap. A decent approval screen is practically a separate product.
+
+  The forecast says 40% of enterprise apps will ship agents by the end of 2026. How many will have an interface anyone actually designed?
 ---
 
 A design agency put out a framework called "Beyond the Chatbox" arguing for something that, to me, should've been obvious for a while: if an AI agent is going to take a real action in your system, a generic text box is almost always the worst possible interface for that. The pitch is to make the agent's reasoning visible, add human approval checkpoints, and use task-specific screens (a form here, a table there) instead of dumping everything back as one long chat reply. The prediction cited is that by the end of 2026 about 40% of enterprise applications will include AI agents for specific tasks, up from less than 5% in 2025.
