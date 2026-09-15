@@ -29,6 +29,8 @@ const t = {
     email: 'Enviar e-mail',
     copyEmail: 'Copiar e-mail',
     copied: 'E-mail copiado',
+    phone: 'Telefone',
+    location: 'Localização',
     groups: {
       languages: 'Linguagens',
       frameworks: 'Frameworks',
@@ -54,6 +56,8 @@ const t = {
     email: 'Send an email',
     copyEmail: 'Copy email',
     copied: 'Email copied',
+    phone: 'Phone',
+    location: 'Location',
     groups: {
       languages: 'Languages',
       frameworks: 'Frameworks',
@@ -105,13 +109,28 @@ const githubHandle = profile.github.replace('https://', '');
   </h1>
   <p class="heading mt-5 text-xl text-[var(--color-accent)] md:text-2xl">{t.role}</p>
   <p class="mt-4 max-w-2xl font-serif text-xl leading-relaxed text-[var(--color-ink-soft)]">{profile.bio[lang]}</p>
-  <ul class="mt-8 flex flex-wrap gap-x-6 gap-y-2 border-t border-[var(--color-border)] pt-6 text-sm">
-    <li><a href={`mailto:${profile.email}`} class="contact-link">{profile.email}</a></li>
-    <li class="text-[var(--color-ink-soft)]">{profile.phone}</li>
-    <li class="text-[var(--color-ink-soft)]">{profile.location}</li>
-    <li><a href={profile.linkedin} target="_blank" rel="noopener" class="contact-link">{linkedinHandle}</a></li>
-    <li><a href={profile.github} target="_blank" rel="noopener" class="contact-link">{githubHandle}</a></li>
-  </ul>
+  <dl class="mt-8 grid gap-x-10 gap-y-4 border-t border-[var(--color-border)] pt-6 text-sm sm:grid-flow-col sm:grid-cols-[repeat(2,minmax(0,max-content))] sm:grid-rows-3">
+    <div class="grid grid-cols-[6.5rem_minmax(0,1fr)] items-baseline gap-3">
+      <dt class="text-[var(--color-muted)]">E-mail</dt>
+      <dd><a href={`mailto:${profile.email}`} class="contact-link">{profile.email}</a></dd>
+    </div>
+    <div class="grid grid-cols-[6.5rem_minmax(0,1fr)] items-baseline gap-3">
+      <dt class="text-[var(--color-muted)]">{t.phone}</dt>
+      <dd class="text-[var(--color-ink)]">{profile.phone}</dd>
+    </div>
+    <div class="grid grid-cols-[6.5rem_minmax(0,1fr)] items-baseline gap-3">
+      <dt class="text-[var(--color-muted)]">{t.location}</dt>
+      <dd class="text-[var(--color-ink)]">{profile.location}</dd>
+    </div>
+    <div class="grid grid-cols-[6.5rem_minmax(0,1fr)] items-baseline gap-3">
+      <dt class="text-[var(--color-muted)]">LinkedIn</dt>
+      <dd><a href={profile.linkedin} target="_blank" rel="noopener" class="contact-link">{linkedinHandle}</a></dd>
+    </div>
+    <div class="grid grid-cols-[6.5rem_minmax(0,1fr)] items-baseline gap-3">
+      <dt class="text-[var(--color-muted)]">GitHub</dt>
+      <dd><a href={profile.github} target="_blank" rel="noopener" class="contact-link">{githubHandle}</a></dd>
+    </div>
+  </dl>
 </header>
 
 <div data-skill-explorer>
